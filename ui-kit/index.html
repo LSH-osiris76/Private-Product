@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>중립 기본형 UI 킷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="description" content="시안·프로토타입·보고 페이지용 중립 기본형 UI 재료 — 색·타이포·프레임·컴포넌트">
+</head>
+<body>
+
+<style>
+/* ══════════════════════════════════════════════════════════════
+   중립 기본형 UI 킷 — 토큰
+   이 페이지는 자기가 설명하는 토큰을 그대로 써서 그려진다.
+   보이는 것이 곧 킷이다.
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* 지면 */
+  --paper:      #fbfbfa;
+  --surface:    #ffffff;
+  --surface-2:  #f3f3f1;
+  --line:       #e3e3e0;
+  --line-soft:  #eeeeec;
+
+  /* 글자 */
+  --ink:        #1a1c1e;
+  --ink-2:      #4a4f55;
+  --ink-3:      #767b81;
+  --ink-4:      #a3a8ad;
+
+  /* 강조 — 청록 계열 하나만 쓴다 */
+  --accent:     #2f6f5e;
+  --accent-ink: #ffffff;
+  --accent-soft:#e9f2ef;
+  --accent-line:#bcd8ce;
+
+  /* 상태 */
+  --good:       #2f7a4f;
+  --warn:       #a8701c;
+  --bad:        #b23a34;
+  --good-soft:  #eaf4ee;
+  --warn-soft:  #faf1e2;
+  --bad-soft:   #fbecea;
+
+  /* 글꼴 */
+  --font:  "IBM Plex Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* 간격 — 4의 배수 */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+
+  /* 모서리 */
+  --r1: 4px; --r2: 8px; --r3: 12px; --r4: 20px;
+
+  /* 그림자 */
+  --shadow-1: 0 1px 2px rgba(20,24,28,.06), 0 1px 1px rgba(20,24,28,.04);
+  --shadow-2: 0 4px 16px rgba(20,24,28,.10);
+  --shadow-3: 0 12px 40px rgba(20,24,28,.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #141618;
+    --surface:    #1b1e21;
+    --surface-2:  #23272a;
+    --line:       #2f3438;
+    --line-soft:  #262a2e;
+
+    --ink:        #e9eaec;
+    --ink-2:      #b6bbc0;
+    --ink-3:      #878d93;
+    --ink-4:      #616770;
+
+    --accent:     #5fbfa5;
+    --accent-ink: #10201c;
+    --accent-soft:#1c2f2a;
+    --accent-line:#2f5b50;
+
+    --good:       #5db97f;
+    --warn:       #d5a55a;
+    --bad:        #e07a72;
+    --good-soft:  #1a2b21;
+    --warn-soft:  #2c2418;
+    --bad-soft:   #2e1e1d;
+
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-2: 0 4px 16px rgba(0,0,0,.5);
+    --shadow-3: 0 12px 40px rgba(0,0,0,.6);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:      #141618;
+  --surface:    #1b1e21;
+  --surface-2:  #23272a;
+  --line:       #2f3438;
+  --line-soft:  #262a2e;
+
+  --ink:        #e9eaec;
+  --ink-2:      #b6bbc0;
+  --ink-3:      #878d93;
+  --ink-4:      #616770;
+
+  --accent:     #5fbfa5;
+  --accent-ink: #10201c;
+  --accent-soft:#1c2f2a;
+  --accent-line:#2f5b50;
+
+  --good:       #5db97f;
+  --warn:       #d5a55a;
+  --bad:        #e07a72;
+  --good-soft:  #1a2b21;
+  --warn-soft:  #2c2418;
+  --bad-soft:   #2e1e1d;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-3: 0 12px 40px rgba(0,0,0,.6);
+}
+
+/* ── 페이지 뼈대 ─────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font); font-size: 15px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { display: grid; grid-template-columns: 208px minmax(0, 1fr); gap: var(--s7); max-width: 1120px; margin: 0 auto; padding: var(--s7) var(--s5) var(--s8); }
+@media (max-width: 860px) { .wrap { grid-template-columns: 1fr; gap: var(--s5); padding-top: var(--s5); } .rail { position: static !important; } }
+
+/* 좌측 색인 */
+.rail { position: sticky; top: var(--s5); align-self: start; }
+.rail .mark { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-4); margin-bottom: var(--s3); }
+.rail a { display: block; padding: 6px 0; color: var(--ink-2); text-decoration: none; font-size: 14px; border-bottom: 1px solid transparent; }
+.rail a:hover { color: var(--accent); }
+.rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r1); }
+
+/* 머리말 */
+.head { border-bottom: 1px solid var(--line); padding-bottom: var(--s5); margin-bottom: var(--s6); }
+.head h1 { font-size: 32px; font-weight: 700; line-height: 1.25; margin: 0 0 var(--s2); letter-spacing: -.02em; text-wrap: balance; }
+.head p { margin: 0; color: var(--ink-2); max-width: 62ch; }
+.head .meta { margin-top: var(--s4); font-family: var(--mono); font-size: 12px; color: var(--ink-4); }
+
+/* 절 */
+section { margin-bottom: var(--s8); scroll-margin-top: var(--s5); }
+/* 한글 절 제목 — 자간을 넓히면 글자가 흩어져 보여 좁게 둔다 */
+section > h2 {
+  font-size: 13px; font-weight: 700; letter-spacing: .02em;
+  color: var(--accent); margin: 0 0 var(--s2);
+}
+section > .lede { margin: 0 0 var(--s5); color: var(--ink-2); max-width: 62ch; font-size: 15px; }
+h3.spec { font-size: 17px; font-weight: 600; margin: var(--s6) 0 var(--s3); letter-spacing: -.01em; }
+h3.spec:first-of-type { margin-top: 0; }
+.note { font-size: 13px; color: var(--ink-3); margin: var(--s2) 0 0; }
+
+/* 표본 상자 — 「그린 것」과 「페이지」를 구분하는 바닥 */
+.stage {
+  background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--r2);
+  padding: var(--s5); display: flex; flex-wrap: wrap; gap: var(--s4); align-items: flex-start;
+}
+.stage.center { justify-content: center; }
+.stage.col { flex-direction: column; }
+
+/* 코드 */
+.code { position: relative; margin-top: var(--s2); }
+.code pre {
+  margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); overflow-x: auto; font-family: var(--mono); font-size: 12.5px;
+  line-height: 1.7; color: var(--ink-2);
+}
+.code button {
+  position: absolute; top: 8px; right: 8px; font-family: var(--font); font-size: 11px; font-weight: 500;
+  background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line);
+  border-radius: var(--r1); padding: 3px 9px; cursor: pointer;
+}
+.code button:hover { color: var(--accent); border-color: var(--accent-line); }
+.code button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 표 */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px var(--s3); border-bottom: 1px solid var(--line-soft); }
+th { font-size: 12px; font-weight: 600; color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; }
+td.mono, .mono { font-family: var(--mono); font-size: 12.5px; }
+.tnum { font-variant-numeric: tabular-nums; }
+.scroll-x { overflow-x: auto; }
+
+/* ══ 색 ══════════════════════════════════════════════════ */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: var(--s3); width: 100%; }
+.sw { border: 1px solid var(--line); border-radius: var(--r2); overflow: hidden; background: var(--surface); }
+.sw i { display: block; height: 56px; }
+.sw b { display: block; padding: 8px 10px 2px; font-size: 12.5px; font-weight: 600; font-family: var(--mono); }
+.sw span { display: block; padding: 0 10px 9px; font-size: 12px; color: var(--ink-3); }
+
+/* ══ 타이포 ═══════════════════════════════════════════════ */
+.type-row { display: grid; grid-template-columns: 132px minmax(0,1fr); gap: var(--s4); align-items: baseline; padding: var(--s3) 0; border-bottom: 1px solid var(--line-soft); width: 100%; }
+.type-row:last-child { border-bottom: 0; }
+.type-row .lbl { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.t-display { font-size: 32px; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.t-h1 { font-size: 24px; font-weight: 700; letter-spacing: -.015em; line-height: 1.3; }
+.t-h2 { font-size: 19px; font-weight: 600; line-height: 1.4; }
+.t-h3 { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.t-body { font-size: 15px; line-height: 1.65; }
+.t-small { font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+.t-label { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.t-mono { font-family: var(--mono); font-size: 13px; }
+
+/* ══ 프레임 ═══════════════════════════════════════════════ */
+/* 1) 모바일 폰 */
+.k-phone {
+  width: 300px; height: 600px; background: var(--surface); border-radius: var(--r4);
+  box-shadow: var(--shadow-3); display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--line);
+}
+.k-phone__status {
+  flex: none; height: 30px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; font-size: 11px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+.k-phone__bar {
+  flex: none; height: 44px; display: flex; align-items: center; padding: 0 14px;
+  border-bottom: 1px solid var(--line-soft); font-size: 14px; font-weight: 600;
+}
+.k-phone__bar .t { flex: 1; text-align: center; }
+.k-phone__bar .i { width: 22px; color: var(--ink-3); font-size: 15px; }
+.k-phone__body { flex: 1; padding: var(--s4); overflow: auto; }
+.k-phone__home { flex: none; height: 22px; display: flex; align-items: center; justify-content: center; }
+.k-phone__home i { width: 106px; height: 4px; border-radius: 2px; background: var(--ink-4); display: block; }
+
+/* 2) 인앱 브라우저 */
+.k-inapp { width: 300px; background: var(--surface); border-radius: var(--r2); overflow: hidden; box-shadow: var(--shadow-2); border: 1px solid var(--line); }
+.k-inapp__bar { background: var(--ink); color: var(--paper); padding: 10px 14px 8px; }
+.k-inapp__top { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.k-inapp__top b { flex: 1; text-align: center; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.k-inapp__host { display: block; text-align: center; margin-top: 1px; font-size: 11px; opacity: .62; font-family: var(--mono); }
+.k-inapp__body { padding: var(--s4); min-height: 150px; }
+
+/* 3) 데스크톱 브라우저 */
+.k-browser { width: 100%; max-width: 560px; border: 1px solid var(--line); border-radius: var(--r2); overflow: hidden; box-shadow: var(--shadow-2); background: var(--surface); }
+.k-browser__chrome { background: var(--surface-2); border-bottom: 1px solid var(--line); padding: 9px 12px; display: flex; align-items: center; gap: 10px; }
+.k-browser__dots { display: flex; gap: 6px; flex: none; }
+.k-browser__dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block; }
+.k-browser__url { flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 3px 12px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.k-browser__body { padding: var(--s5); min-height: 150px; }
+
+/* ══ 컴포넌트 ═════════════════════════════════════════════ */
+.k-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 40px; padding: 0 18px; border-radius: var(--r2); border: 1px solid transparent;
+  font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink); transition: filter .15s ease;
+}
+.k-btn:hover { filter: brightness(1.08); }
+.k-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.k-btn--outline { background: transparent; color: var(--ink); border-color: var(--line); }
+.k-btn--outline:hover { border-color: var(--accent); color: var(--accent); filter: none; }
+.k-btn--ghost { background: transparent; color: var(--ink-2); }
+.k-btn--ghost:hover { background: var(--surface-2); filter: none; }
+.k-btn--sm { height: 32px; padding: 0 12px; font-size: 13px; }
+.k-btn[disabled] { opacity: .45; cursor: not-allowed; filter: none; }
+
+.k-field { display: flex; flex-direction: column; gap: 5px; min-width: 200px; }
+.k-field label { font-size: 12.5px; font-weight: 500; color: var(--ink-2); }
+.k-input, .k-select {
+  height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r2);
+  background: var(--surface); color: var(--ink); font-family: var(--font); font-size: 14px; width: 100%;
+}
+.k-input::placeholder { color: var(--ink-4); }
+.k-input:focus, .k-select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+.k-help { font-size: 12px; color: var(--ink-3); }
+.k-help--bad { color: var(--bad); }
+
+.k-badge {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: var(--r1);
+  font-size: 11.5px; font-weight: 600; background: var(--surface-2); color: var(--ink-2);
+}
+.k-badge--accent { background: var(--accent-soft); color: var(--accent); }
+.k-badge--good { background: var(--good-soft); color: var(--good); }
+.k-badge--warn { background: var(--warn-soft); color: var(--warn); }
+.k-badge--bad  { background: var(--bad-soft);  color: var(--bad); }
+
+.k-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r2);
+  padding: var(--s4); box-shadow: var(--shadow-1); display: flex; flex-direction: column; gap: 6px; min-width: 220px; max-width: 300px;
+}
+.k-card h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.k-card p { margin: 0; font-size: 13.5px; color: var(--ink-2); }
+/* 카드는 세로 flex라 뱃지가 가로로 늘어난다 — 시작점에 붙인다 */
+.k-card .k-badge { align-self: flex-start; }
+
+.k-tabs { display: flex; gap: var(--s5); border-bottom: 1px solid var(--line); width: 100%; }
+.k-tabs button {
+  background: none; border: 0; border-bottom: 2px solid transparent; padding: 9px 0; cursor: pointer;
+  font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--ink-3);
+}
+.k-tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.k-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.k-toast {
+  display: inline-flex; align-items: center; gap: var(--s3); background: var(--ink); color: var(--paper);
+  padding: 11px 16px; border-radius: var(--r2); font-size: 13.5px; box-shadow: var(--shadow-2);
+}
+
+.k-modal { width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r2); box-shadow: var(--shadow-3); overflow: hidden; }
+.k-modal__head { display: flex; align-items: center; padding: var(--s4); border-bottom: 1px solid var(--line-soft); }
+.k-modal__head b { flex: 1; font-size: 16px; font-weight: 600; }
+.k-modal__head button { background: none; border: 0; font-size: 18px; color: var(--ink-3); cursor: pointer; line-height: 1; }
+.k-modal__body { padding: var(--s4); color: var(--ink-2); font-size: 14px; }
+.k-modal__foot { display: flex; justify-content: flex-end; gap: var(--s2); padding: var(--s3) var(--s4) var(--s4); }
+
+/* 알림 상자 */
+.callout { border: 1px solid var(--accent-line); background: var(--accent-soft); border-radius: var(--r2); padding: var(--s4); font-size: 14px; }
+.callout b { display: block; margin-bottom: 4px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <nav class="rail" aria-label="목차">
+    <div class="mark">목차</div>
+    <a href="#start">시작하기</a>
+    <a href="#color">색</a>
+    <a href="#type">타이포</a>
+    <a href="#frame">프레임</a>
+    <a href="#comp">컴포넌트</a>
+    <a href="#all">토큰 전체</a>
+  </nav>
+
+  <main>
+    <div class="head">
+      <h1>중립 기본형 UI 킷</h1>
+      <p>시안·프로토타입·보고용 페이지를 만들 때 가져다 쓰는 기본 재료다. 특정 회사 색이 들어 있지 않아 사내·사외 어디에 올려도 문제가 없다. 보이는 화면이 곧 이 킷으로 그려져 있다.</p>
+      <div class="meta">v1.0 · 2026-08-19 · 라이트/다크 자동 대응</div>
+    </div>
+
+    <section id="start">
+      <h2>시작하기</h2>
+      <p class="lede">쓰는 법은 둘 중 하나다. 통째로 가져가거나, 필요한 조각만 복사한다.</p>
+      <div class="callout">
+        <b>통째로 쓸 때</b>
+        아래 <a href="#all" style="color:var(--accent)">토큰 전체</a>를 새 파일 맨 위에 붙이고, 각 조각의 클래스 이름(<span class="mono">k-btn</span>, <span class="mono">k-card</span> …)을 그대로 쓴다.
+      </div>
+      <p class="note">조각만 쓸 때는 각 예시 아래 코드를 복사한다. 코드에 쓰인 <span class="mono">var(--…)</span> 값이 토큰이므로, 토큰 목록도 함께 가져가야 색과 간격이 맞는다.</p>
+    </section>
+
+    <section id="color">
+      <h2>색</h2>
+      <p class="lede">색에 이름을 붙여 정해둔 목록이다. <span class="mono">#2f6f5e</span> 대신 <span class="mono">var(--accent)</span>로 부르면, 다크 모드에서 알아서 다른 값으로 바뀐다. 강조색은 하나만 둔다 — 여러 개를 쓰면 무엇이 중요한지 안 보인다.</p>
+
+      <h3 class="spec">지면과 글자</h3>
+      <div class="stage">
+        <div class="swatches">
+          <div class="sw"><i style="background:var(--paper)"></i><b>--paper</b><span>페이지 바닥</span></div>
+          <div class="sw"><i style="background:var(--surface)"></i><b>--surface</b><span>카드·입력칸</span></div>
+          <div class="sw"><i style="background:var(--surface-2)"></i><b>--surface-2</b><span>한 단계 눌린 면</span></div>
+          <div class="sw"><i style="background:var(--line)"></i><b>--line</b><span>테두리</span></div>
+          <div class="sw"><i style="background:var(--ink)"></i><b>--ink</b><span>본문 글자</span></div>
+          <div class="sw"><i style="background:var(--ink-2)"></i><b>--ink-2</b><span>보조 설명</span></div>
+          <div class="sw"><i style="background:var(--ink-3)"></i><b>--ink-3</b><span>라벨·주석</span></div>
+          <div class="sw"><i style="background:var(--ink-4)"></i><b>--ink-4</b><span>비활성</span></div>
+        </div>
+      </div>
+
+      <h3 class="spec">강조와 상태</h3>
+      <div class="stage">
+        <div class="swatches">
+          <div class="sw"><i style="background:var(--accent)"></i><b>--accent</b><span>강조 — 딱 하나</span></div>
+          <div class="sw"><i style="background:var(--accent-soft)"></i><b>--accent-soft</b><span>강조 배경</span></div>
+          <div class="sw"><i style="background:var(--good)"></i><b>--good</b><span>정상·완료</span></div>
+          <div class="sw"><i style="background:var(--warn)"></i><b>--warn</b><span>주의</span></div>
+          <div class="sw"><i style="background:var(--bad)"></i><b>--bad</b><span>오류</span></div>
+        </div>
+      </div>
+      <p class="note">상태 3색은 강조색과 별개다. 「좋다·주의·나쁘다」를 나타낼 때만 쓰고, 예쁘게 보이려고 쓰지 않는다.</p>
+    </section>
+
+    <section id="type">
+      <h2>타이포</h2>
+      <p class="lede">글자 크기를 미리 8단으로 정해뒀다. 매번 정하지 않고 이 중에서 고른다. 본문 글줄은 65자 안쪽으로 끊는다 — 그보다 길면 눈이 다음 줄을 못 찾는다.</p>
+      <div class="stage col">
+        <div class="type-row"><span class="lbl">display · 32/700</span><span class="t-display">참여형 광고 리드폼</span></div>
+        <div class="type-row"><span class="lbl">h1 · 24/700</span><span class="t-h1">캠페인 성과 요약</span></div>
+        <div class="type-row"><span class="lbl">h2 · 19/600</span><span class="t-h2">응답 결과 보고서</span></div>
+        <div class="type-row"><span class="lbl">h3 · 16/600</span><span class="t-h3">문항별 응답 분포</span></div>
+        <div class="type-row"><span class="lbl">body · 15/400</span><span class="t-body">본문이다. 줄간격 1.65로 두면 한글이 답답해 보이지 않는다.</span></div>
+        <div class="type-row"><span class="lbl">small · 13/400</span><span class="t-small">보조 설명이나 각주에 쓴다.</span></div>
+        <div class="type-row"><span class="lbl">label · 11/600</span><span class="t-label">지표 라벨</span></div>
+        <div class="type-row"><span class="lbl">mono · 13</span><span class="t-mono">1,204,873 · MA-1120</span></div>
+      </div>
+      <p class="note">글꼴은 IBM Plex Sans KR(본문)과 IBM Plex Mono(숫자·코드) 두 벌이다. 숫자가 세로로 늘어서는 표에는 <span class="mono">font-variant-numeric: tabular-nums</span>를 준다.</p>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"&gt;
+
+--font: "IBM Plex Sans KR", -apple-system, "Malgun Gothic", sans-serif;
+--mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;</pre>
+      </div>
+    </section>
+
+    <section id="frame">
+      <h2>프레임</h2>
+      <p class="lede">화면을 감싸는 껍데기다. 같은 내용이라도 폰 프레임 안에 넣으면 「모바일 화면」으로 읽히고, 브라우저 프레임에 넣으면 「웹페이지」로 읽힌다. 시안을 설명 없이 이해시키는 가장 싼 방법이다.</p>
+
+      <h3 class="spec">모바일 폰</h3>
+      <div class="stage center">
+        <div class="k-phone">
+          <div class="k-phone__status"><span>9:41</span><span>LTE ▮▮▮</span></div>
+          <div class="k-phone__bar"><span class="i">〈</span><span class="t">신청서</span><span class="i" style="text-align:right">✕</span></div>
+          <div class="k-phone__body">
+            <div class="t-h2" style="margin-bottom:8px">관심 있는 항목을<br>골라주세요</div>
+            <p class="t-small" style="margin:0 0 16px">중복 선택할 수 있어요.</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="k-btn k-btn--outline" style="width:100%">냉장고</div>
+              <div class="k-btn k-btn--outline" style="width:100%">인덕션</div>
+              <div class="k-btn k-btn--outline" style="width:100%">식기세척기</div>
+            </div>
+            <button class="k-btn" style="width:100%;margin-top:20px">다음</button>
+          </div>
+          <div class="k-phone__home"><i></i></div>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-phone"&gt;
+  &lt;div class="k-phone__status"&gt;&lt;span&gt;9:41&lt;/span&gt;&lt;span&gt;LTE ▮▮▮&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="k-phone__bar"&gt;
+    &lt;span class="i"&gt;〈&lt;/span&gt;&lt;span class="t"&gt;제목&lt;/span&gt;&lt;span class="i"&gt;✕&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="k-phone__body"&gt;내용&lt;/div&gt;
+  &lt;div class="k-phone__home"&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">인앱 브라우저</h3>
+      <p class="note" style="margin-bottom:12px">메신저나 앱 안에서 웹페이지가 열린 상태다. 광고를 눌러 랜딩으로 넘어간 장면에 쓴다.</p>
+      <div class="stage center">
+        <div class="k-inapp">
+          <div class="k-inapp__bar">
+            <div class="k-inapp__top"><span>✕</span><span>⌄</span><b>8월 구매 혜택</b><span>⋮</span></div>
+            <span class="k-inapp__host">brandmall.example.com</span>
+          </div>
+          <div class="k-inapp__body">
+            <div class="t-h3" style="margin-bottom:6px">8월 구매 혜택</div>
+            <p class="t-small" style="margin:0 0 12px">행사 기간 8/3 ~ 8/31</p>
+            <div class="k-card" style="max-width:none;min-width:0">
+              <span class="k-badge k-badge--accent">혜택 01</span>
+              <h4>금액대별 특별 캐시백</h4>
+              <p>최대 30만원</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-inapp"&gt;
+  &lt;div class="k-inapp__bar"&gt;
+    &lt;div class="k-inapp__top"&gt;&lt;span&gt;✕&lt;/span&gt;&lt;span&gt;⌄&lt;/span&gt;&lt;b&gt;제목&lt;/b&gt;&lt;span&gt;⋮&lt;/span&gt;&lt;/div&gt;
+    &lt;span class="k-inapp__host"&gt;example.com&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="k-inapp__body"&gt;내용&lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">데스크톱 브라우저</h3>
+      <div class="stage center">
+        <div class="k-browser">
+          <div class="k-browser__chrome">
+            <div class="k-browser__dots"><i></i><i></i><i></i></div>
+            <div class="k-browser__url">https://example.com/report</div>
+          </div>
+          <div class="k-browser__body">
+            <div class="t-label" style="margin-bottom:4px">응답 수</div>
+            <div class="t-h1 tnum" style="margin-bottom:12px">2,417</div>
+            <p class="t-small" style="margin:0">지난 30일 · 전월 대비 +18%</p>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-browser"&gt;
+  &lt;div class="k-browser__chrome"&gt;
+    &lt;div class="k-browser__dots"&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+    &lt;div class="k-browser__url"&gt;https://example.com&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="k-browser__body"&gt;내용&lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+    </section>
+
+    <section id="comp">
+      <h2>컴포넌트</h2>
+      <p class="lede">자주 쓰는 조각이다. 버튼 하나를 매번 새로 만들면 페이지마다 높이가 달라진다. 여기 있는 것을 먼저 찾고, 없을 때만 새로 만든다.</p>
+
+      <h3 class="spec">버튼</h3>
+      <div class="stage">
+        <button class="k-btn">신청하기</button>
+        <button class="k-btn k-btn--outline">취소</button>
+        <button class="k-btn k-btn--ghost">나중에</button>
+        <button class="k-btn k-btn--sm">작은 버튼</button>
+        <button class="k-btn" disabled>비활성</button>
+      </div>
+      <p class="note">한 화면에 <span class="mono">k-btn</span>(채운 버튼)은 하나만 둔다. 그게 「지금 눌러야 할 것」이다.</p>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;button class="k-btn"&gt;신청하기&lt;/button&gt;
+&lt;button class="k-btn k-btn--outline"&gt;취소&lt;/button&gt;
+&lt;button class="k-btn k-btn--ghost"&gt;나중에&lt;/button&gt;
+&lt;button class="k-btn k-btn--sm"&gt;작은 버튼&lt;/button&gt;</pre>
+      </div>
+
+      <h3 class="spec">입력칸</h3>
+      <div class="stage">
+        <div class="k-field">
+          <label for="d1">이름</label>
+          <input class="k-input" id="d1" placeholder="홍길동">
+          <span class="k-help">실명으로 입력해 주세요.</span>
+        </div>
+        <div class="k-field">
+          <label for="d2">연락처</label>
+          <input class="k-input" id="d2" value="010-1234" style="border-color:var(--bad)">
+          <span class="k-help k-help--bad">번호 11자리를 모두 입력해 주세요.</span>
+        </div>
+        <div class="k-field">
+          <label for="d3">문항 유형</label>
+          <select class="k-select" id="d3"><option>객관식</option><option>주관식</option></select>
+        </div>
+      </div>
+      <p class="note">오류 문구는 무엇이 잘못됐고 어떻게 고치는지를 쓴다. 「잘못된 값입니다」로 끝내지 않는다.</p>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-field"&gt;
+  &lt;label for="name"&gt;이름&lt;/label&gt;
+  &lt;input class="k-input" id="name" placeholder="홍길동"&gt;
+  &lt;span class="k-help"&gt;실명으로 입력해 주세요.&lt;/span&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">뱃지</h3>
+      <div class="stage">
+        <span class="k-badge">기본</span>
+        <span class="k-badge k-badge--accent">신규</span>
+        <span class="k-badge k-badge--good">작성 완료</span>
+        <span class="k-badge k-badge--warn">검토 중</span>
+        <span class="k-badge k-badge--bad">발행 실패</span>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;span class="k-badge k-badge--good"&gt;작성 완료&lt;/span&gt;</pre>
+      </div>
+
+      <h3 class="spec">카드</h3>
+      <div class="stage">
+        <div class="k-card">
+          <span class="k-badge k-badge--accent">베네핏</span>
+          <h4>최대 30만원 캐시백 쿠폰</h4>
+          <p>응답 즉시 지급 · 잔여 48,213장</p>
+        </div>
+        <div class="k-card">
+          <span class="k-badge">상담</span>
+          <h4>평일 09~18시</h4>
+          <p>완료 화면에서 바로 상담을 시작할 수 있어요.</p>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-card"&gt;
+  &lt;span class="k-badge k-badge--accent"&gt;베네핏&lt;/span&gt;
+  &lt;h4&gt;제목&lt;/h4&gt;
+  &lt;p&gt;설명&lt;/p&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">탭</h3>
+      <div class="stage col">
+        <div class="k-tabs" role="tablist">
+          <button role="tab" aria-selected="true">상세 설정</button>
+          <button role="tab" aria-selected="false">보고서</button>
+          <button role="tab" aria-selected="false">변경 이력</button>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-tabs" role="tablist"&gt;
+  &lt;button role="tab" aria-selected="true"&gt;상세 설정&lt;/button&gt;
+  &lt;button role="tab" aria-selected="false"&gt;보고서&lt;/button&gt;
+&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">표</h3>
+      <div class="stage">
+        <div class="scroll-x" style="width:100%">
+          <table>
+            <thead><tr><th>폼 ID</th><th>이름</th><th>상태</th><th style="text-align:right">응답 수</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">MA-1120</td><td>주방가전 구매혜택</td><td><span class="k-badge k-badge--good">작성 완료</span></td><td class="mono tnum" style="text-align:right">2,417</td></tr>
+              <tr><td class="mono">MA-1101</td><td>추석 선물세트 사전예약</td><td><span class="k-badge k-badge--good">작성 완료</span></td><td class="mono tnum" style="text-align:right">3,184</td></tr>
+              <tr><td class="mono">MA-1029</td><td>멤버십 사전 가입</td><td><span class="k-badge k-badge--warn">임시 저장</span></td><td class="mono tnum" style="text-align:right">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="note">숫자 칸은 오른쪽 정렬하고 <span class="mono">tabular-nums</span>를 준다. 자릿수가 맞아야 크기 비교가 눈으로 된다.</p>
+
+      <h3 class="spec">토스트</h3>
+      <div class="stage">
+        <div class="k-toast"><span>저장했습니다</span><button class="k-btn k-btn--sm k-btn--ghost" style="color:var(--paper)">되돌리기</button></div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-toast"&gt;&lt;span&gt;저장했습니다&lt;/span&gt;&lt;/div&gt;</pre>
+      </div>
+
+      <h3 class="spec">모달</h3>
+      <div class="stage center">
+        <div class="k-modal">
+          <div class="k-modal__head"><b>저장하지 않은 정보가 있어요</b><button type="button" aria-label="닫기">✕</button></div>
+          <div class="k-modal__body">지금 나가면 입력한 내용이 사라집니다. 임시 저장하면 나중에 이어서 작성할 수 있어요.</div>
+          <div class="k-modal__foot">
+            <button class="k-btn k-btn--outline k-btn--sm">나가기</button>
+            <button class="k-btn k-btn--sm">임시 저장</button>
+          </div>
+        </div>
+      </div>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>&lt;div class="k-modal"&gt;
+  &lt;div class="k-modal__head"&gt;&lt;b&gt;제목&lt;/b&gt;&lt;button aria-label="닫기"&gt;✕&lt;/button&gt;&lt;/div&gt;
+  &lt;div class="k-modal__body"&gt;내용&lt;/div&gt;
+  &lt;div class="k-modal__foot"&gt;
+    &lt;button class="k-btn k-btn--outline k-btn--sm"&gt;취소&lt;/button&gt;
+    &lt;button class="k-btn k-btn--sm"&gt;확인&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+    </section>
+
+    <section id="all">
+      <h2>토큰 전체</h2>
+      <p class="lede">새 파일을 만들 때 이 덩어리를 맨 위에 붙인다. 라이트·다크 세 가지 상태를 모두 처리한다 — 시스템 설정을 따르는 기본 상태까지 포함이다.</p>
+      <div class="code">
+        <button type="button">복사</button>
+<pre>:root {
+  --paper:#fbfbfa; --surface:#ffffff; --surface-2:#f3f3f1;
+  --line:#e3e3e0; --line-soft:#eeeeec;
+  --ink:#1a1c1e; --ink-2:#4a4f55; --ink-3:#767b81; --ink-4:#a3a8ad;
+  --accent:#2f6f5e; --accent-ink:#ffffff; --accent-soft:#e9f2ef; --accent-line:#bcd8ce;
+  --good:#2f7a4f; --warn:#a8701c; --bad:#b23a34;
+  --good-soft:#eaf4ee; --warn-soft:#faf1e2; --bad-soft:#fbecea;
+  --font:"IBM Plex Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:72px;
+  --r1:4px; --r2:8px; --r3:12px; --r4:20px;
+  --shadow-1:0 1px 2px rgba(20,24,28,.06),0 1px 1px rgba(20,24,28,.04);
+  --shadow-2:0 4px 16px rgba(20,24,28,.10);
+  --shadow-3:0 12px 40px rgba(20,24,28,.18);
+}
+/* 시스템이 다크일 때 (사용자가 라이트를 명시하지 않은 경우) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#141618; --surface:#1b1e21; --surface-2:#23272a;
+    --line:#2f3438; --line-soft:#262a2e;
+    --ink:#e9eaec; --ink-2:#b6bbc0; --ink-3:#878d93; --ink-4:#616770;
+    --accent:#5fbfa5; --accent-ink:#10201c; --accent-soft:#1c2f2a; --accent-line:#2f5b50;
+    --good:#5db97f; --warn:#d5a55a; --bad:#e07a72;
+    --good-soft:#1a2b21; --warn-soft:#2c2418; --bad-soft:#2e1e1d;
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 4px 16px rgba(0,0,0,.5);
+    --shadow-3:0 12px 40px rgba(0,0,0,.6);
+  }
+}
+/* 사용자가 다크를 명시한 경우 */
+:root[data-theme="dark"] { /* 위 다크 값과 동일하게 한 번 더 */ }
+
+body { background: var(--paper); color: var(--ink); font-family: var(--font); }</pre>
+      </div>
+      <p class="note">마지막 줄이 중요하다. <span class="mono">body</span>에 배경을 명시하지 않으면 페이지가 뜨는 곳의 배경을 그대로 받아, 라이트 바탕에 라이트 글자가 나오는 사고가 난다.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+// 코드 복사 — 클립보드가 막힌 환경에서는 텍스트를 선택해 준다
+document.querySelectorAll('.code button').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var pre = btn.parentElement.querySelector('pre');
+    var done = function (msg) {
+      var old = btn.textContent;
+      btn.textContent = msg;
+      setTimeout(function () { btn.textContent = old; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pre.innerText).then(
+        function () { done('복사됨'); },
+        function () { select(pre); done('선택됨 · Ctrl+C'); }
+      );
+    } else {
+      select(pre);
+      done('선택됨 · Ctrl+C');
+    }
+  });
+});
+function select(el) {
+  var r = document.createRange();
+  r.selectNodeContents(el);
+  var s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
+}
+</script>
+
+</body>
+</html>

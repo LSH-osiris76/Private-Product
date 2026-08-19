@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private Product</title>
+<meta name="description" content="개인 용도로 만든 데모와 재료 모음">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* 중립 기본형 UI 킷 토큰 — ui-kit/ 과 같은 값 */
+:root {
+  --paper:#fbfbfa; --surface:#ffffff; --surface-2:#f3f3f1;
+  --line:#e3e3e0; --line-soft:#eeeeec;
+  --ink:#1a1c1e; --ink-2:#4a4f55; --ink-3:#767b81; --ink-4:#a3a8ad;
+  --accent:#2f6f5e; --accent-soft:#e9f2ef; --accent-line:#bcd8ce;
+  --font:"IBM Plex Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --r2:8px;
+  --shadow-1:0 1px 2px rgba(20,24,28,.06),0 1px 1px rgba(20,24,28,.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#141618; --surface:#1b1e21; --surface-2:#23272a;
+    --line:#2f3438; --line-soft:#262a2e;
+    --ink:#e9eaec; --ink-2:#b6bbc0; --ink-3:#878d93; --ink-4:#616770;
+    --accent:#5fbfa5; --accent-soft:#1c2f2a; --accent-line:#2f5b50;
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#141618; --surface:#1b1e21; --surface-2:#23272a;
+  --line:#2f3438; --line-soft:#262a2e;
+  --ink:#e9eaec; --ink-2:#b6bbc0; --ink-3:#878d93; --ink-4:#616770;
+  --accent:#5fbfa5; --accent-soft:#1c2f2a; --accent-line:#2f5b50;
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+main{max-width:680px;margin:0 auto;padding:var(--s7) var(--s5)}
+h1{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:0 0 var(--s2);text-wrap:balance}
+.lede{color:var(--ink-2);margin:0 0 var(--s6);max-width:60ch}
+.mark{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);margin-bottom:var(--s3)}
+.items{display:flex;flex-direction:column;gap:var(--s3);list-style:none;padding:0;margin:0}
+.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:var(--s4) var(--s5);text-decoration:none;color:inherit;box-shadow:var(--shadow-1);transition:border-color .15s ease,transform .15s ease}
+.card:hover{border-color:var(--accent-line);transform:translateY(-1px)}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card b{display:block;font-size:17px;font-weight:600;margin-bottom:3px}
+.card span{display:block;font-size:13.5px;color:var(--ink-2)}
+.card .path{display:inline-block;margin-top:var(--s3);font-family:var(--mono);font-size:11.5px;color:var(--accent)}
+footer{margin-top:var(--s7);padding-top:var(--s5);border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="mark">Private Product</div>
+  <h1>데모와 재료 모음</h1>
+  <p class="lede">개인 용도로 만든 것들을 링크로 열어볼 수 있게 모아둔 곳이다. 전부 파일 하나로 동작하며 서버가 필요 없다.</p>
+
+  <ul class="items">
+    <li>
+      <a class="card" href="./leadform/">
+        <b>리드폼+ 광고 콘솔</b>
+        <span>광고 노출 → 폼 참여 → 쿠폰 발급 → 상담 → 브랜드 앱까지 이어지는 참여형 광고 데모. 광고주가 폼을 만들고 관리하는 화면과 사용자가 보는 화면을 함께 볼 수 있다.</span>
+        <span class="path">/leadform/</span>
+      </a>
+    </li>
+    <li>
+      <a class="card" href="./ui-kit/">
+        <b>중립 기본형 UI 킷</b>
+        <span>시안·프로토타입을 만들 때 가져다 쓰는 재료. 색·타이포·프레임(폰·인앱 브라우저·데스크톱)·컴포넌트를 복사용 코드와 함께 정리했다.</span>
+        <span class="path">/ui-kit/</span>
+      </a>
+    </li>
+  </ul>
+
+  <footer>
+    데모 데이터는 전부 가상이다. 실제 브랜드·계정·개인정보를 쓰지 않는다.
+  </footer>
+</main>
+</body>
+</html>

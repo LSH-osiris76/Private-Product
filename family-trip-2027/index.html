@@ -101,6 +101,17 @@ details.fold[open]>summary::after{content:'접기 ▴'}
 .daytabs button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
 .daytabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .sticky-total{display:none}
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.prods{grid-template-columns:1fr}}
+.prod{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card);display:flex;flex-direction:column;gap:4px}
+.prod .nm{font-weight:700}
+.prod .meta{font-size:13px;color:var(--sub)}
+.prod .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px}
+.prod label{font-size:13.5px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.prod input{width:18px;height:18px}
+.slotpick{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.slotpick select{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+#customBox{display:none;margin-top:12px}
 .stays{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 @media (max-width:640px){.stays{grid-template-columns:1fr}}
 .stay{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg)}
@@ -141,7 +152,7 @@ a{color:var(--accent)}
 </header>
 
 <nav class="toc">
-  <a href="#summary">정리</a><a href="#sim">일정·비용 시뮬레이터</a><a href="#review">형님 안 평가</a>
+  <a href="#summary">정리</a><a href="#sim">일정·비용 시뮬레이터</a><a href="#prods">추가 상품</a><a href="#review">형님 안 평가</a>
   <a href="#caution">휴무·주의</a><a href="#places">추천 장소</a><a href="#todo">확인 필요</a><a href="#src">출처</a>
 </nav>
 
@@ -164,6 +175,11 @@ a{color:var(--accent)}
   <h2>일정·비용 시뮬레이터</h2>
   <div class="card">
     <div class="planpick" id="planpick"></div>
+    <div id="customBox" class="card" style="background:var(--bg)">
+      <b>직접 조합</b> <span class="flag" style="color:var(--sub)">숙소 순서를 고르고 시간대마다 할 일을 고르면 일정·비용이 바뀜. 동선이 맞는지는 직접 확인</span>
+      <div class="seg" data-opt="cOrder" style="margin:8px 0"></div>
+      <div id="slotpicks"></div>
+    </div>
     <div class="opts">
       <div class="opt"><label class="t">이동 방식</label><div class="seg" data-opt="move"></div></div>
       <div class="opt"><label class="t">고베규 식사</label><div class="seg" data-opt="beef"></div></div>
@@ -188,6 +204,15 @@ a{color:var(--accent)}
     <div class="daytabs" id="daytabs"></div>
     <div id="days"></div>
   </div>
+</section>
+
+<section id="prods">
+  <h2>추가 상품 (Booking.com)</h2>
+  <div class="callout warn">2026-10-07 조회 표시가. 1인 가격인지 1팀 가격인지는 상품마다 다르니 상품 페이지에서 인원을 넣어 확인할 것. 「비용에 포함」을 켜면 표시가 1건이 합계에 더해짐. 결제는 각자 진행.</div>
+  <div class="prods" id="prodlist"></div>
+  <h3>참고 — 석식 포함 아리마 료칸 (2/6~8, 2박·3실·조석식 포함)</h3>
+  <p class="flag" style="color:var(--sub);margin-top:0">현재 예약한 프린세스 아리마는 2박 약 171만 원(조식만). 가이세키 저녁을 원하면 아래처럼 석식 포함 료칸이 대안이며 가격대가 높음.</p>
+  <div class="prods" id="ryokanlist"></div>
 </section>
 
 <section id="review">
@@ -325,6 +350,43 @@ const HOTEL_INFO = {
     pts:['아리마온센역에서 무료 송영(시각은 호텔 문의)','조식 포함 · 석식 별도','온천 대욕장 15:00~23:00 · 06:00~10:00','실내 온수 수영장'],
     url:'https://www.booking.com/hotel/jp/the-gran-resort-princess-arima.html'},
 };
+const PRODS = [
+  {id:'charter', nm:'고베 주변 공항 전용차(차터)', krw:143690, meta:'6시간 · 문 앞 픽업 · 휠체어 가능 · 24시간 전 무료취소', note:'공항↔아리마 이동 후보. 차량 크기·인원은 문의', url:'https://www.booking.com/attractions/jp/prf0u8jvdrfw-airport-charter-service-around-kobe.ko.html'},
+  {id:'arimaRokko', nm:'아리마 온천·롯코산 개인 투어(택시 포함)', krw:481877, meta:'3~4시간 · 아리마온센역·산노미야 픽업 · 롯코산 야경 포함 · 무료취소', note:'어르신 이동 부담을 줄이는 택시 투어', url:'https://www.booking.com/attractions/jp/pr1cu2bjxort-private-kobe-tour-with-arima-onsen-and-mt-rokko-sightseeing.ko.html'},
+  {id:'cityPriv', nm:'고베 시티 개인 투어 4시간', krw:157702, meta:'평점 4.91 (17)', note:'시내 핵심을 가이드와 짧게', url:'https://www.booking.com/attractions/jp/prd8jp6fcnrz-4-hours-kobe-city-tour.ko.html'},
+  {id:'student', nm:'고베 맞춤 투어(현지 학생 가이드)', krw:100758, meta:'평점 4.91 (58)', note:'원하는 곳 위주로 맞춤', url:'https://www.booking.com/attractions/jp/przzylxpnajm-personalized-kobe-tour-with-local-student-guide.ko.html'},
+  {id:'arimaWalk', nm:'아리마 온천 역사·문화 걷기 투어', krw:168225, meta:'아리마역 출발', note:'사찰·온천가 해설. 오르막 있음', url:'https://www.booking.com/attractions/jp/prqimnw7epkn-kobe-arima-onsen-historical-and-cultural-walking-tour.ko.html'},
+  {id:'nankin', nm:'난킨마치 길거리 음식 투어 1.5시간', krw:147193, meta:'초안몬 집결', note:'아이도 즐기기 쉬움', url:'https://www.booking.com/attractions/jp/pr1o8duugiw2-kobe-nankinmachi-chinatown-food-walking-tour-with-guide.ko.html'},
+  {id:'beefSake', nm:'프리미엄 고베규 & 사케 시음 투어', krw:289132, meta:'평점 5.0 (11)', note:'사케 시음은 성인만', url:'https://www.booking.com/attractions/jp/prn1ccry0mzb-premium-kobe-beef-experience-and-sake-tasting-culinary-tour.ko.html'},
+];
+const RYOKAN = [
+  {nm:'아리마 핫 스프링 료칸 코토리', krw:3825223, meta:'3성 · 평점 8.7 (282) · 노천탕', url:'https://www.booking.com/hotel/jp/kotori.ko.html'},
+  {nm:'아리마 온센 겟코엔 유게츠산소', krw:3967651, meta:'5성 · 평점 8.4 (761) · 노천탕 · 무료 셔틀', url:'https://www.booking.com/hotel/jp/arima-onsen-gekkoen-yugetsusanso.ko.html'},
+  {nm:'네기야 료후카쿠', krw:5696943, meta:'4성 · 평점 9.1 (1,589) · 노천탕 · 엘리베이터', url:'https://www.booking.com/hotel/jp/negiya.ko.html'},
+  {nm:'아리마 온센 토센 고쇼보', krw:6521979, meta:'5성 · 평점 9.3 (867) · 온천가 중심', url:'https://www.booking.com/hotel/jp/tosen-goshobo.ko.html'},
+];
+const BLOCKS = {
+  free:{n:'자유 시간·숙소 휴식'},
+  arimaWalk:{n:'아리마 온천가·온센지 산책', tag:'temple'},
+  nakayama:{n:'나카야마데라', tag:'temple', seg:'nakayama'},
+  ikutaShop:{n:'이쿠타 신사 + 센터가이·다이마루 쇼핑', tag:'shop', seg:'city'},
+  outlet:{n:'마린피아 아울렛', tag:'shop', seg:'city'},
+  beef:{n:'고베규 식사', tag:'food', beef:true},
+  nankin:{n:'난킨마치', tag:'food'},
+  taiko:{n:'다이코노유', tag:'onsen', bath:'taiko'},
+  ginno:{n:'긴노유', tag:'onsen', bath:'ginno'},
+  zoo:{n:'고베 동물왕국', tag:'kid', att:['zoo']},
+  anpan:{n:'안판만 뮤지엄 + 우미에', tag:'kid', att:['anpan']},
+  meriken:{n:'메리켄파크·포트타워·아토아', tag:'kid', att:['tower','atoa']},
+  rokko:{n:'롯코산 케이블·로프웨이', tag:'move', seg:'rokko'},
+  hotelDinner:{n:'숙소 저녁', tag:'food', dinner:true},
+};
+const SLOTS = [
+  ['2/6 토',[['18:00','저녁','hotelDinner']]],
+  ['2/7 일',[['10:00','오전','arimaWalk'],['13:30','오후','nakayama'],['18:00','저녁','hotelDinner']]],
+  ['2/8 월',[['10:00','오전','ikutaShop'],['13:00','오후','beef'],['18:00','저녁','nankin']]],
+  ['2/9 화',[['10:00','오전','zoo']]],
+];
 const STAYS = {
   '1':[['port','2/6(토) ~ 2/8(월) · 2박',HOTEL.port68,'2027-02-06','2027-02-08'],['arima','2/8(월) ~ 2/9(화) · 1박',HOTEL.arima89,'2027-02-08','2027-02-09']],
   '2':[['arima','2/6(토) ~ 2/8(월) · 2박',HOTEL.arima68,'2027-02-06','2027-02-08'],['port','2/8(월) ~ 2/9(화) · 1박',HOTEL.port89,'2027-02-08','2027-02-09']],
@@ -418,6 +480,7 @@ const PLANS = {
         ['13:30','move','공항 도착','출발 2시간 전'],
         ['15:30','move','고베공항 출발','']]],
     ]},
+  custom:{name:'직접 조합', short:'시간대별로 직접 고르기', arimaNights:2, order:'2', segs:[], att:[], beef:false, extra:[], desc:'아래 칸에서 숙소 순서와 시간대별 할 일을 고르면 일정과 비용이 바뀜.', days:[]},
   popular:{name:'인기 동선안', short:'시내 정석 + 롯코 넘어 아리마', arimaNights:1, order:'1', bathDay:'wd',
     desc:'여행 블로그·고베시 추천 코스에 자주 나오는 「항구 평지 + 롯코산 → 아리마 1박」을 1안 숙소 순서에 맞춘 안. 로프웨이 운휴 시 롯코산은 빼고 직행.',
     segs:['air-port','city','city','air-arima'], att:['tower','atoa','bath','zoo'], beef:true, extra:['rokko'],
@@ -450,6 +513,7 @@ const SCORE = {
   bro2:{어르신:3,사찰:1,쇼핑:2,귀국여유:5},
   rec:{어르신:4,사찰:5,쇼핑:4,귀국여유:5},
   popular:{어르신:3,사찰:2,쇼핑:4,귀국여유:2},
+  custom:null,
 };
 
 const OPTS = {
@@ -457,15 +521,25 @@ const OPTS = {
   beef:[['ishida','Ishida. 런치'],['moriya','모리야 런치'],['dept','백화점 식당가']],
   arimaDinner:[['sep','별도 결제 ⚠️'],['incl','석식 포함 플랜']],
   bath:[['taiko','다이코노유'],['ginno','긴노유'],['none','숙소 대욕장만']],
+  cOrder:[['2','2안 순서(아리마 먼저)'],['1','1안 순서(포트피아 먼저)']],
 };
-const state = {day:-1, plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
+const state = {prods:[], cOrder:'2', cSel:{}, day:-1, plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
 
 const FX = 846.17; // 원/100엔, 2026-10-07 11:00 기준환율 고정
 const won = y => y*FX/100;
 const per = p => p.a*PAX.a + p.s*PAX.s + p.c*PAX.c;
 const fmt = n => Math.round(n).toLocaleString('ko-KR');
 
+function customPlan(){
+  const o = state.cOrder; const pl = PLANS.custom; pl.order=o; pl.arimaNights = o==='2'?2:1;
+  const stayOf = i => i===3?'':(o==='2'?(i<2?'아리마':'포트피아'):(i<2?'포트피아':'아리마'));
+  pl.days = SLOTS.map(([d,sl],i)=>[d, stayOf(i), sl.map(([t,lab,def])=>{
+    const k = state.cSel[d+lab]||def; const b=BLOCKS[k]; return [t, b.tag||'', b.n, lab+' · 직접 선택', k];})]);
+  pl.segs = o==='2' ? ['air-arima','port-arima','air-port'] : ['air-port','port-arima','air-arima'];
+  return pl;
+}
 function calc(){
+  if(state.plan==='custom') customPlan();
   const pl = PLANS[state.plan]; const rows = [];
   // 이동
   if(state.move==='rent'){
@@ -486,12 +560,28 @@ function calc(){
     if(k==='bath'){ if(state.bath==='none') continue; const a=ATT[state.bath]; const d=pl.bathDay||'we'; rows.push([a.name+(d==='we'?' (주말 요금)':' (평일 요금)'),'',per(a[d])]); continue; }
     const a=ATT[k]; rows.push([a.name, '', a.fixed??per(a.p)]);
   }
+  if(state.plan==='custom'){
+    let beefCnt=0, dinnerCnt=0;
+    for(const [d,stay,items] of pl.days) for(const it of items){
+      const b=BLOCKS[it[4]]; const wd = (d.startsWith('2/8')||d.startsWith('2/9')) ? 'wd':'we';
+      if(b.seg && state.move!=='rent'){ const sg=SEG[b.seg]; rows.push([b.n+' 이동','⚠️', state.move==='taxi'&&sg.taxi ? sg.taxi*TAXI_CARS : per(sg.pub)]); }
+      if(b.att) for(const a of b.att){ const A=ATT[a]; rows.push([A.name,'',A.fixed??per(A.p)]); }
+      if(b.bath){ const A=ATT[b.bath]; rows.push([A.name+(wd==='we'?' (주말 요금)':' (평일 요금)'),'',per(A[wd])]); }
+      if(b.beef) beefCnt++;
+      if(b.dinner && stay==='아리마') dinnerCnt++;
+    }
+    if(beefCnt){ const bf=BEEF[state.beef]; rows.push(['고베규 '+beefCnt+'회: '+bf.label,'유아 요금 ⚠️',per(bf.p)*beefCnt]); }
+    if(state.arimaDinner==='sep' && dinnerCnt){ rows.push(['아리마 숙소 저녁 '+dinnerCnt+'회','⚠️',per(ARIMA_DINNER)*dinnerCnt]); }
+    rows.push(['그 밖의 식비 4일','⚠️',per(DAILY_FOOD)*4]);
+  }
+  for(const id of state.prods){ const pr=PRODS.find(x=>x.id===id); if(pr) rows.push(['추가 상품: '+pr.nm,'표시가 1건 ⚠️',pr.krw*100/FX,pr.krw]); }
+  if(state.plan==='custom'){ const jpy=rows.reduce((t,r)=>t+(r[3]==null?r[2]:0),0); const krwOnly=rows.reduce((t,r)=>t+(r[3]!=null?r[3]:0),0); return {rows, jpy, krwOnly}; }
   // 식사
   if(pl.beef){ const b=BEEF[state.beef]; rows.push(['고베규 1회: '+b.label,'유아 요금 ⚠️',per(b.p)]); }
   if(state.arimaDinner==='sep'){ rows.push(['아리마 저녁 '+pl.arimaNights+'회','⚠️',per(ARIMA_DINNER)*pl.arimaNights]); }
   rows.push(['그 밖의 식비 4일','⚠️',per(DAILY_FOOD)*4]);
-  const jpy = rows.reduce((t,r)=>t+r[2],0);
-  return {rows, jpy};
+  const jpy = rows.reduce((t,r)=>t+(r[3]==null?r[2]:0),0); const krwOnly = rows.reduce((t,r)=>t+(r[3]!=null?r[3]:0),0);
+  return {rows, jpy, krwOnly};
 }
 
 function render(){
@@ -501,19 +591,28 @@ function render(){
   const fx = FX;
   const pl0 = PLANS[state.plan]; const hotelIn = parseFloat(document.getElementById('hotel').value);
   const hotel = hotelIn>0 ? hotelIn : HOTEL_BY_ORDER[pl0.order]; const hotelSrc = hotelIn>0 ? '입력값' : 'Booking.com 시세(2026-10-07)';
-  const {rows,jpy} = calc();
-  const krw = jpy*fx/100 + hotel;
+  const {rows,jpy,krwOnly} = calc();
+  const krw = jpy*fx/100 + krwOnly + hotel;
   document.getElementById('totKrw').textContent = '약 '+fmt(krw/10000)+'만 원';
-  document.getElementById('totJpy').textContent = '현지 비용 '+fmt(won(jpy))+'원('+fmt(jpy)+'엔) + 숙소 '+fmt(hotel)+'원('+hotelSrc+')';
+  document.getElementById('totJpy').textContent = '현지 비용 '+fmt(won(jpy))+'원('+fmt(jpy)+'엔)'+(krwOnly?' + 추가 상품 '+fmt(krwOnly)+'원':'')+' + 숙소 '+fmt(hotel)+'원('+hotelSrc+')';
   document.getElementById('perHead').textContent = '1인 평균 약 '+fmt(krw/N/10000)+'만 원';
   document.getElementById('stTot').textContent = '약 '+fmt(krw/10000)+'만 원';
   document.getElementById('stSub').textContent = PLANS[state.plan].name+' · 1인 약 '+fmt(krw/N/10000)+'만 원';
   let h = '<tr><th>항목</th><th>비고</th><th>원 (엔)</th></tr>';
-  for(const r of rows) h += `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(won(r[2]))}원<br><span class="flag" style="color:var(--sub)">${fmt(r[2])}엔</span></td></tr>`;
+  for(const r of rows) h += r[3]!=null ? `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(r[3])}원</td></tr>` : `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(won(r[2]))}원<br><span class="flag" style="color:var(--sub)">${fmt(r[2])}엔</span></td></tr>`;
   h += `<tr><td>숙소 3박 3실 (${pl0.order==='1'?'포트피아 2박+아리마 1박':'아리마 2박+포트피아 1박'})</td><td class="flag">${hotelSrc}</td><td>${fmt(hotel)}원</td></tr>`;
   document.getElementById('bd').innerHTML = h;
+  const cb = document.getElementById('customBox'); cb.style.display = state.plan==='custom'?'block':'none';
+  if(state.plan==='custom'){
+    const opts = Object.entries(BLOCKS).map(([k,b])=>[k,b.n]);
+    document.getElementById('slotpicks').innerHTML = SLOTS.map(([d,sl])=>sl.map(([t,lab,def])=>{const cur=state.cSel[d+lab]||def;
+      return `<div class="slotpick"><span>${d.split(' ')[0]} ${lab}</span><select data-key="${d+lab}">${opts.map(([k,n])=>`<option value="${k}" ${k===cur?'selected':''}>${n}</option>`).join('')}</select></div>`;}).join('')).join('');
+  }
+  document.getElementById('prodlist').innerHTML = PRODS.map(p=>`<div class="prod"><div class="nm">${p.nm}</div><div class="meta">${p.meta}</div><div class="meta">${p.note}</div>
+    <div class="row"><b>${fmt(p.krw)}원~</b><label><input type="checkbox" data-prod="${p.id}" ${state.prods.includes(p.id)?'checked':''}>비용에 포함</label></div>
+    <a href="${p.url}?start_date=2027-02-06&end_date=2027-02-09&selected_currency=KRW" target="_blank" rel="noopener">Booking.com에서 보기 ↗</a></div>`).join('');
   // 점수
-  const sc = SCORE[state.plan];
+  const sc = SCORE[state.plan] || {귀국여유: state.cOrder==='2'?5:2};
   document.getElementById('score').innerHTML = Object.entries(sc).map(([k,v])=>`<div><small>${k}</small><strong>${'●'.repeat(v)}${'○'.repeat(5-v)}</strong></div>`).join('');
   // 일정
   const pl = PLANS[state.plan];
@@ -551,6 +650,11 @@ function init(){
     g.addEventListener('click',e=>{const b=e.target.closest('button'); if(b){state[g.dataset.opt]=b.dataset.v; render();}});
   });
   document.getElementById('hotel').addEventListener('input',render);
+  document.getElementById('ryokanlist').innerHTML = RYOKAN.map(r=>`<div class="prod"><div class="nm">${r.nm}</div><div class="meta">${r.meta}</div>
+    <div class="row"><b>${fmt(r.krw)}원</b><span class="flag" style="color:var(--sub)">2박·3실·조석식</span></div>
+    <a href="${r.url}?checkin=2027-02-06&checkout=2027-02-08&no_rooms=3&group_adults=6&selected_currency=KRW" target="_blank" rel="noopener">Booking.com에서 보기 ↗</a></div>`).join('');
+  document.getElementById('prodlist').addEventListener('change',e=>{const id=e.target.dataset.prod; if(!id) return; state.prods = e.target.checked ? [...new Set([...state.prods,id])] : state.prods.filter(x=>x!==id); render();});
+  document.getElementById('slotpicks').addEventListener('change',e=>{const k=e.target.dataset.key; if(k){state.cSel[k]=e.target.value; render();}});
   render();
 }
 init();

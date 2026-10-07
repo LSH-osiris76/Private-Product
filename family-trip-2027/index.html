@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>고베·아리마 설 가족여행</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#f6f7f9; --card:#fff; --ink:#1b1f24; --sub:#5b6573; --line:#e3e7ec;
+  --accent:#2f6fde; --accent-soft:#e8f0fd; --warn:#b4560a; --warn-soft:#fff4e5;
+  --ok:#18794e; --ok-soft:#e7f6ee; --bad:#c2352c; --bad-soft:#fdecea;
+  --temple:#8a5a1f; --food:#c2352c; --shop:#7a3fbf; --kid:#18794e; --onsen:#2f6fde; --move:#5b6573;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --card:#1b1e23; --ink:#e9ecf0; --sub:#a3acb8; --line:#2c3138;
+    --accent:#6ea0ff; --accent-soft:#1d2a40; --warn:#f0a35a; --warn-soft:#33270f;
+    --ok:#4cc38a; --ok-soft:#14301f; --bad:#ff7b72; --bad-soft:#3a1715;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:15px;line-height:1.65;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 64px}
+header.hero{padding:36px 0 20px}
+.hero h1{font-size:26px;line-height:1.3;margin:0 0 6px;text-wrap:balance}
+.hero p{margin:0;color:var(--sub)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+nav.toc{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;gap:4px;overflow-x:auto;padding:8px 0;margin-bottom:8px}
+nav.toc a{white-space:nowrap;font-size:13.5px;color:var(--sub);text-decoration:none;padding:4px 10px;border-radius:8px}
+nav.toc a:hover{background:var(--card);color:var(--ink)}
+section{margin-top:28px}
+h2{font-size:20px;margin:0 0 12px}
+h3{font-size:16px;margin:20px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.callout{border-radius:12px;padding:12px 14px;margin:10px 0}
+.callout.warn{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}
+.callout.ok{background:var(--ok-soft);border-left:4px solid var(--ok)}
+.callout.bad{background:var(--bad-soft);border-left:4px solid var(--bad)}
+ol.key{margin:0;padding-left:20px}
+ol.key li{margin:6px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.tbl th{color:var(--sub);font-weight:600;font-size:13px}
+.tblwrap{overflow-x:auto}
+.mark{font-weight:700}
+.mark.o{color:var(--ok)} .mark.x{color:var(--bad)} .mark.t{color:var(--warn)}
+
+/* simulator */
+.planpick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:640px){.planpick{grid-template-columns:1fr 1fr}}
+.planbtn{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 10px;
+  text-align:left;cursor:pointer;font:inherit}
+.planbtn b{display:block;font-size:14.5px}
+.planbtn span{display:block;font-size:12px;color:var(--sub);line-height:1.4;margin-top:2px}
+.planbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin-top:14px}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+.opt label.t{display:block;font-size:13px;color:var(--sub);margin-bottom:4px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 10px;font:inherit;font-size:13.5px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.opt input[type=number]{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.total{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.total .big{font-size:28px;font-weight:800}
+.total .sm{color:var(--sub);font-size:13.5px}
+.breakdown{margin-top:8px}
+.breakdown td:last-child,.breakdown th:last-child{text-align:right;white-space:nowrap}
+.day{margin-top:14px}
+.dayhead{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.dayhead b{font-size:16px}
+.dayhead span{color:var(--sub);font-size:13px}
+.slot{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.slot:first-of-type{border-top:none}
+.slot .tm{color:var(--sub);font-size:13px;padding-top:1px;font-variant-numeric:tabular-nums}
+.slot .ti{font-weight:600}
+.slot .nt{color:var(--sub);font-size:13.5px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:4px;vertical-align:1px;color:#fff}
+.tag.temple{background:var(--temple)} .tag.food{background:var(--food)} .tag.shop{background:var(--shop)}
+.tag.kid{background:var(--kid)} .tag.onsen{background:var(--onsen)} .tag.move{background:var(--move)}
+.flag{font-size:12px;color:var(--warn)}
+.score{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+@media (max-width:640px){.score{grid-template-columns:1fr 1fr}}
+.score div{background:var(--bg);border-radius:10px;padding:8px 10px}
+.score small{display:block;color:var(--sub);font-size:12px}
+.score strong{font-size:15px}
+footer{margin-top:40px;color:var(--sub);font-size:12.5px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>고베·아리마 설 가족여행</h1>
+  <p>2027-02-06(토) ~ 02-09(화) · 3가족 8명 · 고베공항 왕복</p>
+  <div class="chips">
+    <span class="chip">사찰</span><span class="chip">미식</span><span class="chip">쇼핑</span>
+    <span class="chip">어르신 동반</span><span class="chip">유치원생 동반</span><span class="chip">오사카·교토 제외</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#summary">정리</a><a href="#sim">일정·비용 시뮬레이터</a><a href="#review">형님 안 평가</a>
+  <a href="#caution">휴무·주의</a><a href="#places">추천 장소</a><a href="#todo">확인 필요</a><a href="#src">출처</a>
+</nav>
+
+<section id="summary">
+  <h2>정리</h2>
+  <div class="card">
+    <ol class="key">
+      <li>숙소는 <b>2안 순서(아리마 2박 → 포트피아 1박)</b>를 권장함. 귀국일 공항까지 약 15분이라 15:30 출발에 여유가 크고, 둘째 날을 아리마에서 쉬며 사찰을 둘러볼 수 있음. 비용을 우선하면 1안이 약 60만 원 저렴함</li>
+      <li>여행 기간이 한국 설 연휴(2/5~8)·중국 춘절(2/6)과 겹침. 고베규 식당·안판만 뮤지엄은 미리 예약해야 함</li>
+      <li>장인어른 사찰은 <b>나카야마데라</b>가 1순위. 엘리베이터가 있어 어르신 동선에 맞음(경내 전 구역은 아님)</li>
+      <li>8명 고베규는 <b>Ishida. 이쿠타신미치점</b>(10~14명 개별실, 아이 동반 가능)이 조건에 가장 맞음</li>
+      <li>숙소 시세는 순서에 따라 크게 다름. Booking.com 같은 조건(3실·8명) 조회 기준 <b>1안 약 153만 원, 2안 약 213만 원</b>. 2안은 아리마가 토·일 연휴 밤이라 약 60만 원 비쌈 (2026-10-07 조회, 이미 예약한 실제 금액은 다를 수 있음)</li>
+      <li>여행 기간에 못 가는 곳: 누노비키 허브원(2/19까지 휴원), 킨노유(2/9 휴관)</li>
+    </ol>
+    <div class="callout warn">엔화 비용은 2026-10-07 11:00 기준환율 100엔 = 846.17원으로 고정해 원화로 표시함. 비용은 공개 요금 기준 계산이며 ⚠️ 표시는 추정치임. 숙소는 Booking.com 시세가 기본값이고, 실제 결제액을 입력하면 그 값으로 바뀜.</div>
+  </div>
+</section>
+
+<section id="sim">
+  <h2>일정·비용 시뮬레이터</h2>
+  <div class="card">
+    <div class="planpick" id="planpick"></div>
+    <div class="opts">
+      <div class="opt"><label class="t">이동 방식</label><div class="seg" data-opt="move"></div></div>
+      <div class="opt"><label class="t">고베규 식사</label><div class="seg" data-opt="beef"></div></div>
+      <div class="opt"><label class="t">아리마 저녁</label><div class="seg" data-opt="arimaDinner"></div></div>
+      <div class="opt"><label class="t">아리마 외부 온천</label><div class="seg" data-opt="bath"></div></div>
+      <div class="opt"><label class="t">숙소 실결제액 합계 (원) — 비우면 시세 적용</label><input type="number" id="hotel" inputmode="numeric" placeholder="시세 기본값 사용" min="0" step="10000"></div>
+      <div class="opt"><label class="t">적용 환율 (고정)</label><div style="padding:7px 0;font-weight:600">100엔 = 846.17원</div><div class="flag">2026-10-07 11:00 기준환율</div></div>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="total">
+      <span class="big" id="totKrw">-</span>
+      <span class="sm" id="totJpy"></span>
+      <span class="sm" id="perHead"></span>
+    </div>
+    <div class="tblwrap breakdown"><table class="tbl" id="bd"></table></div>
+    <p class="flag">요금 구분: 성인(고등학생 포함) 5 · 시니어 2 · 유아 1. 2/8(월)은 일본 평일이라 평일 요금 적용. 시니어 할인은 할인이 있는 시설만 적용함. 쇼핑은 개인 지출이라 제외함.</p>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3 style="margin-top:0" id="planTitle"></h3>
+    <p class="nt" id="planDesc" style="margin:0;color:var(--sub)"></p>
+    <div id="days"></div>
+  </div>
+</section>
+
+<section id="review">
+  <h2>형님 안 평가</h2>
+  <div class="card">
+    <p style="margin-top:0">형님 안(2026-10-06 Gemini 정리본: 2/6 「금」 표기, 1일차 산노미야 고베규·야경, 2일차 기타노 이진칸·롯코산 야경, 3일차 아리마, 4일차 공항)은 숙소 2곳과 일정 뼈대를 잘 잡았음. 어르신·아이 동선과 연휴 조건을 반영하면 아래 부분을 고치는 편이 좋음.</p>
+    <div class="tblwrap"><table class="tbl">
+      <tr><th style="width:26%">항목</th><th style="width:12%">판정</th><th>내용</th></tr>
+      <tr><td>숙소 선택</td><td><span class="mark o">좋음</span></td><td>공항 15분 시내 호텔 + 온천 리조트 조합이 이 일정에 맞음</td></tr>
+      <tr><td>요일 표기</td><td><span class="mark x">수정</span></td><td>2/6은 금요일이 아니라 토요일임. 휴무일 판단이 요일에 걸려 있어 바로잡아야 함</td></tr>
+      <tr><td>숙소 순서(1안)</td><td><span class="mark t">주의</span></td><td>귀국일 아리마→공항 약 1시간 10분. 15:30 출발이면 대형택시 사전예약이 전제임. 2안은 이 부담이 없음</td></tr>
+      <tr><td>기타노 이진칸 산책</td><td><span class="mark t">주의</span></td><td>언덕·계단이 많은 지역이라 어르신은 짧게 보거나 빼는 편이 좋음 ⚠️</td></tr>
+      <tr><td>롯코산 야경</td><td><span class="mark t">주의</span></td><td>2월 정상부는 영하·결빙. 어르신·유치원생과 밤에 오르면 부담이 큼</td></tr>
+      <tr><td>사찰</td><td><span class="mark x">보완</span></td><td>장인어른 선호인 사찰 일정이 없음 → 나카야마데라·온센지 추가</td></tr>
+      <tr><td>쇼핑</td><td><span class="mark x">보완</span></td><td>쇼핑 시간이 따로 없음 → 산노미야·모토마치·다이마루 반나절 배정</td></tr>
+      <tr><td>아이 일정</td><td><span class="mark t">보완</span></td><td>유치원생 몫이 없음 → 동물왕국·안판만 뮤지엄 중 하나 추가</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section id="caution">
+  <h2>휴무·주의</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">여행 기간에 못 가는 곳</h3>
+      <div class="callout bad">누노비키 허브원·로프웨이 — 2027-01-23 ~ 02-19 점검 휴원</div>
+      <div class="callout bad">킨노유(금탕) — 둘째·넷째 화요일 휴관 → 2/9(화) 휴관. 긴노유는 영업</div>
+      <div class="callout warn">Ishida. 고베규 — 목요일 휴무(여행 기간엔 해당 없음)</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">미리 알아둘 것</h3>
+      <ul style="margin:0;padding-left:18px">
+        <li>포트피아 대욕장은 유료이고 18세 미만 이용 불가 → 아이들 온천은 아리마에서</li>
+        <li>포트피아는 조식 미포함 요금 기준, 주차 1일 1,000엔, 호텔 내 렌터카 서비스 있음(Booking.com 숙소 안내)</li>
+        <li>8명은 일반 택시 2~3대. 짐까지 있으면 3대 또는 9인승 차량</li>
+        <li>렌터카는 국제운전면허증(제네바 협약 양식)+여권 필요, 8명이면 8인승 이상 승합차. 6세 미만은 카시트 의무(택시·버스는 면제)</li>
+        <li>아리마 온천가는 오르막이 많음 → 어르신은 송영·택시로 위쪽까지</li>
+        <li>로프웨이(롯코-아리마)는 연 1회 3주 점검. 2027년 2월 일정 미확정</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="places">
+  <h2>추천 장소</h2>
+  <div class="tblwrap card"><table class="tbl">
+    <tr><th style="width:16%">분류</th><th style="width:30%">장소</th><th>이유</th></tr>
+    <tr><td><span class="tag temple">사찰</span></td><td>나카야마데라 (다카라즈카)</td><td>엘리베이터(09:00~16:30)·에스컬레이터, 입장 무료. 경내 전 구역이 휠체어 가능한 것은 아님</td></tr>
+    <tr><td><span class="tag temple">사찰</span></td><td>이쿠타 신사 (산노미야)</td><td>시내 평지, 쇼핑 동선 안에서 짧게 참배</td></tr>
+    <tr><td><span class="tag temple">사찰</span></td><td>온센지·다이코노유도노칸 (아리마)</td><td>숙소 도보권. 오르막이라 어르신은 차로 근처까지</td></tr>
+    <tr><td><span class="tag food">미식</span></td><td>Ishida. 이쿠타신미치점</td><td>고베규 코스 런치 8,250엔~(와규 런치는 더 저렴), 10~14명 개별실, 아이 동반 가능</td></tr>
+    <tr><td><span class="tag food">미식</span></td><td>난킨마치</td><td>예약 없이 길거리 음식. 춘절 행사와 겹칠 가능성</td></tr>
+    <tr><td><span class="tag food">미식</span></td><td>아리마 탄산센베이·다케나카 정육점 고로케</td><td>온천가 산책 간식. 정육점은 수요일 휴무</td></tr>
+    <tr><td><span class="tag shop">쇼핑</span></td><td>산노미야 센터가이 → 모토마치 → 다이마루</td><td>지붕 있는 평지로 이어짐. 이쿠타 신사·난킨마치·양과자 한 동선</td></tr>
+    <tr><td><span class="tag shop">쇼핑</span></td><td>하버랜드 우미에</td><td>대형몰, 면세 안내. 안판만 뮤지엄과 같은 단지</td></tr>
+    <tr><td><span class="tag kid">아이</span></td><td>고베 동물왕국 (포트아일랜드)</td><td>포트피아에서 가깝고 전 연령 만족. 목요일만 휴원</td></tr>
+    <tr><td><span class="tag kid">아이</span></td><td>안판만 어린이 뮤지엄</td><td>유치원생 최적. 일시 지정 웹 티켓 사전 구매 필수</td></tr>
+    <tr><td><span class="tag onsen">온천</span></td><td>다이코노유 (아리마)</td><td>평지 대형 시설, 26종 욕탕·식당. 8명이 한 번에</td></tr>
+  </table></div>
+</section>
+
+<section id="todo">
+  <h2>확인 필요</h2>
+  <div class="tblwrap card"><table class="tbl">
+    <tr><th style="width:38%">항목</th><th>확인처</th><th style="width:22%">언제</th></tr>
+    <tr><td>숙소 1안·2안 중 확정, 안 쓰는 예약 취소 기한</td><td>예약 사이트</td><td>지금</td></tr>
+    <tr><td>프린세스 아리마 송영버스 시각, 8명+짐 탑승</td><td>호텔 078-904-1566</td><td>출발 2주 전</td></tr>
+    <tr><td>프린세스 아리마 석식 — 시세 요금은 조식만 포함. 석식 플랜 추가 여부</td><td>예약 플랜·호텔</td><td>지금</td></tr>
+    <tr><td>진에어 실제 출·도착 시각(동계 스케줄)</td><td>진에어 앱</td><td>출발 1개월 전</td></tr>
+    <tr><td>9인승 차량·대형택시 요금</td><td>MK택시 등 예약 화면</td><td>출발 1개월 전</td></tr>
+    <tr><td>롯코-아리마 로프웨이 2월 점검 여부</td><td>078-891-0031</td><td>출발 1개월 전</td></tr>
+    <tr><td>안판만 뮤지엄 2월 휴관일·티켓</td><td>공식 사이트</td><td>출발 1개월 전</td></tr>
+    <tr><td>고베규 식당 개별실 예약, 엘리베이터 유무</td><td>식당</td><td>출발 1~2개월 전</td></tr>
+  </table></div>
+</section>
+
+<section id="src">
+  <h2>출처</h2>
+  <div class="card" style="font-size:13.5px">
+    <ul style="margin:0;padding-left:18px">
+      <li><a href="https://www.portopia.co.jp/access/bus/">고베 포트피아 호텔 셔틀버스</a> · <a href="https://www.portopia.co.jp/fitness-esthe/luana/">대욕장 루아나</a></li>
+      <li><a href="https://www.granresort.jp/gr-member/hotel/parima/access.php">더 그랜드 리조트 프린세스 아리마 액세스</a></li>
+      <li><a href="https://enjoy-osaka-kyoto-kobe.com/ja/article/a/arima-onsen-access/">아리마 온천 교통(버스·전철 요금)</a></li>
+      <li><a href="https://koberope.jp/rokko/price/">롯코-아리마 로프웨이 요금·시간</a> · <a href="https://www.rokkocable.com/">롯코 케이블</a></li>
+      <li><a href="https://www.data.jma.go.jp/obd/stats/etrn/view/nml_sfc_ym.php?prec_no=63&block_no=47770">일본 기상청 고베 평년값</a></li>
+      <li><a href="https://www.nakayamadera.or.jp/faq/">나카야마데라 FAQ</a> · <a href="https://ikutajinja.or.jp/">이쿠타 신사</a></li>
+      <li><a href="https://www.city.kobe.lg.jp/a64051/kanko/kisyasiryo/202602/342205980651.html">고베시 킨노유 재개장 안내</a> · <a href="https://www.asoview.com/note/5625/">킨노유·긴노유</a> · <a href="https://www.asoview.com/note/5695/">다이코노유</a></li>
+      <li><a href="https://www.kobeherb.com/infomation/hours_fare/">누노비키 허브원 영업 안내</a></li>
+      <li><a href="https://r.gnavi.co.jp/c192809/">Ishida. 이쿠타신미치점(구루나비)</a> · <a href="https://r.gnavi.co.jp/k062102/">로열 모리야</a></li>
+      <li><a href="https://www.kobe-oukoku.com/">고베 동물왕국</a> · <a href="https://www.kobe-anpanman.jp/guide/">안판만 뮤지엄</a> · <a href="https://rurubu.jp/andmore/spot/80130465">아토아</a> · <a href="https://www.mapple.net/article/15784/">포트타워</a></li>
+      <li><a href="https://www.daimaru.co.jp/kobe/hours.html">다이마루 고베</a> · <a href="https://umie.jp/">우미에</a> · <a href="https://www.nankinmachi.or.jp/">난킨마치</a></li>
+      <li><a href="https://www.feel-kobe.jp/model_course/kobe-familytrip/">feel KOBE 가족여행 코스(고베시 공식)</a> · <a href="https://www.feel-kobe.jp/model_course/modelcourse_01/">처음 고베 1일 코스</a></li>
+      <li><a href="https://wwwtb.mlit.go.jp/kinki/content/000379518.pdf">긴키운수국 택시 운임 공시</a> · <a href="https://www.npa.go.jp/bureau/traffic/anzen/childseat.html">일본 경찰청 카시트 안내</a></li>
+      <li><a href="https://www.kobe-np.co.jp/info/prtimes/202501/c84116_r259.shtml">아토아 요금 개정(유아 무료)</a> · <a href="https://happyell.co.jp/spot/kitanozaka">기타노자카</a></li>
+      <li>숙소 시세: Booking.com 조회(2026-10-07, 3실·8명)</li>
+    </ul>
+    <p style="margin-bottom:0;color:var(--sub)">조사일 2026-10-07. 영업시간·요금은 출발 1개월 전 공식 사이트로 다시 확인할 것.</p>
+  </div>
+</section>
+
+<footer>가족 공유용 페이지 · 개인정보(나이·이름·예약번호)는 싣지 않음</footer>
+</div>
+
+<script>
+// ===== 요금 데이터 (엔) — a: 성인, s: 시니어, c: 유아 / est: 추정 =====
+const PAX = {a:5, s:2, c:1};
+const N = PAX.a + PAX.s + PAX.c;
+const TAXI_CARS = 3;
+const P = (a,s,c,est)=>({a,s:s??a,c,est:!!est});
+
+// 구간 이동: pub(1인 요금), taxi(1대 요금, 추정)
+const SEG = {
+  'air-port':  {name:'공항 ↔ 포트피아', pub:P(340,340,170), taxi:2000},
+  'air-arima': {name:'공항 ↔ 아리마', pub:P(810,810,410,true), taxi:13000},
+  'port-arima':{name:'포트피아 ↔ 아리마', pub:P(780,780,390,true), taxi:11000},
+  'city':      {name:'시내 이동(하루)', pub:P(800,800,400,true), taxi:4000},
+  'nakayama':  {name:'나카야마데라 왕복', pub:P(1200,1200,600,true), taxi:14000},
+  'rokko':     {name:'롯코 케이블+로프웨이', pub:P(800+1400+400,800+1400+400,400+700+200,true), taxi:null},
+  'himeji':    {name:'히메지 왕복', pub:P(2000,2000,1000,true), taxi:null},
+};
+const RENT = {perDay:28000, days:3, extraPerDay:3000, portParking:1000}; // 8인승 이상 승합차·연료·통행료 추정, 포트피아 주차 1일 1,000엔(Booking.com)
+// 숙소 시세(원) — Booking.com 2026-10-07 조회, 3실·성인 6·아동 2. 아리마는 조식 포함·석식 미포함, 포트피아는 조식 미포함
+const HOTEL = {
+  port68:902047, arima68:1707566, port89:426258, arima89:632844,
+};
+const HOTEL_BY_ORDER = {'1':HOTEL.port68+HOTEL.arima89, '2':HOTEL.arima68+HOTEL.port89};
+
+const ATT = {
+  zoo:     {name:'고베 동물왕국', p:P(2400,1900,500)},
+  atoa:    {name:'아토아 수족관(유아 1명 성인 동반 무료)', p:P(2600,2600,0)},
+  tower:   {name:'포트타워(유아 무료)', p:P(1200,600,0)},
+  anpan:   {name:'안판만 뮤지엄(아이+부모 3명)', fixed:2500*3},
+  taiko:   {name:'다이코노유', we:P(2970+75,2970+75,550), wd:P(2750+75,2750+75,440)}, // 입탕세 75엔 포함
+  ginno:   {name:'긴노유(유아 무료)', we:P(700,700,0), wd:P(550,550,0)},
+  himejiC: {name:'히메지성', p:P(1000,1000,200)},
+};
+const BEEF = {
+  ishida:{label:'Ishida. 런치', p:P(8250,8250,4000)},
+  moriya:{label:'모리야 런치', p:P(20000,20000,8000)},
+  dept:  {label:'백화점 식당가', p:P(3000,3000,1500)},
+};
+const DAILY_FOOD = P(5000,5000,2500,true); // 고베규·숙소 석식 외 하루 식비
+const ARIMA_DINNER = P(7000,7000,3500,true);
+
+// ===== 일정 =====
+// item: [시각, 태그, 제목, 메모, 비용키]
+const PLANS = {
+  bro1:{name:'형님 1안', short:'포트피아 2박 → 아리마 1박', arimaNights:1, order:'1',
+    desc:'Gemini 정리본 그대로. 요일만 바로잡음.',
+    segs:['air-port','city','city','port-arima','air-arima'], att:['tower'], beef:true, extra:['rokko-cable'],
+    days:[
+      ['2/6 토','포트피아',[
+        ['14:45','move','고베공항 도착 ⚠️','도착 시각은 동계 스케줄 확인 필요'],
+        ['15:30','move','포트피아 체크인','공항에서 약 15분'],
+        ['18:00','food','산노미야 고베규 저녁',''],
+        ['20:00','','메리켄파크·하버랜드 야경','포트타워 전망']]],
+      ['2/7 일','포트피아',[
+        ['10:00','','기타노 이진칸 거리 산책','⚠️ 언덕·계단 많음'],
+        ['17:00','move','롯코산 케이블카 야경','⚠️ 정상부 영하·결빙']]],
+      ['2/8 월','아리마',[
+        ['10:00','move','체크아웃 → 아리마 이동','약 1시간 15분'],
+        ['14:00','onsen','아리마 온천 마을 산책','킨노유·긴노유'],
+        ['18:00','food','리조트 온천욕·저녁','']]],
+      ['2/9 화','',[
+        ['10:00','move','체크아웃 → 공항','약 1시간 10분, 대형택시 예약 권장'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
+  bro2:{name:'형님 2안', short:'아리마 2박 → 포트피아 1박', arimaNights:2, order:'2',
+    desc:'숙소 순서만 바꾸고 1안 내용을 날짜에 맞춰 옮김.',
+    segs:['air-arima','port-arima','city','air-port'], att:['tower'], beef:true, extra:['rokko-cable'],
+    days:[
+      ['2/6 토','아리마',[
+        ['14:45','move','고베공항 도착 ⚠️',''],
+        ['16:30','move','아리마 체크인','약 1시간 10분'],
+        ['18:00','food','리조트 온천욕·저녁','']]],
+      ['2/7 일','아리마',[
+        ['10:00','onsen','아리마 온천 마을 산책','킨노유·긴노유'],
+        ['17:00','move','롯코산 야경','⚠️ 정상부 영하·결빙']]],
+      ['2/8 월','포트피아',[
+        ['10:00','move','체크아웃 → 포트피아','짐 맡기고 시내로'],
+        ['12:00','','기타노 이진칸 산책','⚠️ 언덕·계단'],
+        ['18:00','food','산노미야 고베규 저녁',''],
+        ['20:00','','메리켄파크·하버랜드 야경','']]],
+      ['2/9 화','',[
+        ['11:00','move','체크아웃 → 공항','약 15분'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
+  rec:{name:'추천안', short:'2안 순서 + 사찰·쇼핑·아이', arimaNights:2, order:'2', bathDay:'we',
+    desc:'2안 숙소 순서. 첫날 무리 없이 온천, 둘째 날 사찰, 셋째 날 고베규·쇼핑, 마지막 날 동물왕국 후 공항.',
+    segs:['air-arima','nakayama','port-arima','city','air-port'], att:['bath','zoo'], beef:true, extra:[],
+    days:[
+      ['2/6 토','아리마',[
+        ['14:45','move','고베공항 도착 ⚠️','입국 후 차량 탑승'],
+        ['16:30','move','아리마 체크인','약 1시간 10분. 짐 많으면 차량 권장'],
+        ['17:00','onsen','숙소 대욕장','15:00~23:00'],
+        ['18:30','food','숙소 저녁','']]],
+      ['2/7 일','아리마',[
+        ['09:30','onsen','아리마 온천가 산책','어르신은 송영·택시로 위쪽부터 내려오기'],
+        ['10:00','temple','온센지·다이코노유도노칸','온천가 안 사찰'],
+        ['11:30','food','탄산센베이·고로케','온천가 간식'],
+        ['13:30','temple','나카야마데라','엘리베이터 09:00~16:30'],
+        ['16:30','onsen','외부 온천 또는 숙소 휴식','다이코노유·긴노유 선택']]],
+      ['2/8 월','포트피아',[
+        ['10:00','move','체크아웃 → 산노미야','차량 약 45분, 짐은 호텔로'],
+        ['11:00','temple','이쿠타 신사','시내 평지'],
+        ['12:00','food','고베규 런치','8명 개별실 예약'],
+        ['14:00','shop','센터가이 → 모토마치 → 다이마루','지붕 있는 평지'],
+        ['17:00','food','난킨마치 저녁','길거리 음식·중식'],
+        ['19:00','move','셔틀로 포트피아','산노미야에서 약 20분']]],
+      ['2/9 화','',[
+        ['10:00','kid','고베 동물왕국','포트피아에서 가까움'],
+        ['11:00','move','체크아웃 → 공항','약 15분'],
+        ['13:30','move','공항 도착','출발 2시간 전'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
+  popular:{name:'인기 동선안', short:'시내 정석 + 롯코 넘어 아리마', arimaNights:1, order:'1', bathDay:'wd',
+    desc:'여행 블로그·고베시 추천 코스에 자주 나오는 「항구 평지 + 롯코산 → 아리마 1박」을 1안 숙소 순서에 맞춘 안. 로프웨이 운휴 시 롯코산은 빼고 직행.',
+    segs:['air-port','city','city','air-arima'], att:['tower','atoa','bath','zoo'], beef:true, extra:['rokko'],
+    days:[
+      ['2/6 토','포트피아',[
+        ['14:45','move','고베공항 도착 ⚠️',''],
+        ['15:30','move','포트피아 체크인',''],
+        ['17:00','','메리켄파크·포트타워','엘리베이터 전망층'],
+        ['18:30','food','하버랜드 모자이크 저녁·야경','']]],
+      ['2/7 일','포트피아',[
+        ['10:00','temple','이쿠타 신사',''],
+        ['11:00','shop','산노미야·모토마치 쇼핑',''],
+        ['12:00','food','고베규 런치',''],
+        ['14:00','food','난킨마치',''],
+        ['16:00','kid','아토아 수족관','메리켄파크']]],
+      ['2/8 월','아리마',[
+        ['10:00','kid','고베 동물왕국',''],
+        ['13:00','move','롯코 케이블 → 롯코산 → 로프웨이 → 아리마','⚠️ 정상부 결빙·로프웨이 점검 확인'],
+        ['16:00','onsen','아리마 온천 마을·외부 온천',''],
+        ['18:30','food','숙소 저녁','']]],
+      ['2/9 화','',[
+        ['10:00','move','체크아웃 → 공항','약 1시간 10분, 킨노유 휴관일'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
+};
+
+// 평가 점수(5점) — 정성 판단
+const SCORE = {
+  bro1:{어르신:2,사찰:1,쇼핑:2,귀국여유:2},
+  bro2:{어르신:3,사찰:1,쇼핑:2,귀국여유:5},
+  rec:{어르신:4,사찰:5,쇼핑:4,귀국여유:5},
+  popular:{어르신:3,사찰:2,쇼핑:4,귀국여유:2},
+};
+
+const OPTS = {
+  move:[['pub','대중교통'],['taxi','택시 3대'],['rent','렌터카 ⚠️']],
+  beef:[['ishida','Ishida. 런치'],['moriya','모리야 런치'],['dept','백화점 식당가']],
+  arimaDinner:[['sep','별도 결제 ⚠️'],['incl','석식 포함 플랜']],
+  bath:[['taiko','다이코노유'],['ginno','긴노유'],['none','숙소 대욕장만']],
+};
+const state = {plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
+
+const FX = 846.17; // 원/100엔, 2026-10-07 11:00 기준환율 고정
+const won = y => y*FX/100;
+const per = p => p.a*PAX.a + p.s*PAX.s + p.c*PAX.c;
+const fmt = n => Math.round(n).toLocaleString('ko-KR');
+
+function calc(){
+  const pl = PLANS[state.plan]; const rows = [];
+  // 이동
+  if(state.move==='rent'){
+    const r = RENT.perDay*RENT.days + RENT.extraPerDay*RENT.days;
+    rows.push(['렌터카 8인승 이상 3일 + 연료·통행료','⚠️ 견적 전 추정', r]);
+    const pn = pl.order==='1'?2:1; rows.push(['포트피아 주차 '+pn+'일','', RENT.portParking*pn]);
+  } else {
+    for(const k of pl.segs){
+      const s = SEG[k];
+      if(state.move==='taxi' && s.taxi){ rows.push([s.name+' (택시 '+TAXI_CARS+'대)','⚠️', s.taxi*TAXI_CARS]); }
+      else { rows.push([s.name, s.pub.est?'⚠️':'', per(s.pub)]); }
+    }
+  }
+  if(pl.extra.includes('rokko')){ const s=SEG.rokko; rows.push([s.name,'⚠️',per(s.pub)]); }
+  if(pl.extra.includes('rokko-cable')){ rows.push(['롯코 케이블 왕복','',1550*(PAX.a+PAX.s)+780*PAX.c]); }
+  // 입장
+  for(const k of pl.att){
+    if(k==='bath'){ if(state.bath==='none') continue; const a=ATT[state.bath]; const d=pl.bathDay||'we'; rows.push([a.name+(d==='we'?' (주말 요금)':' (평일 요금)'),'',per(a[d])]); continue; }
+    const a=ATT[k]; rows.push([a.name, '', a.fixed??per(a.p)]);
+  }
+  // 식사
+  if(pl.beef){ const b=BEEF[state.beef]; rows.push(['고베규 1회: '+b.label,'유아 요금 ⚠️',per(b.p)]); }
+  if(state.arimaDinner==='sep'){ rows.push(['아리마 저녁 '+pl.arimaNights+'회','⚠️',per(ARIMA_DINNER)*pl.arimaNights]); }
+  rows.push(['그 밖의 식비 4일','⚠️',per(DAILY_FOOD)*4]);
+  const jpy = rows.reduce((t,r)=>t+r[2],0);
+  return {rows, jpy};
+}
+
+function render(){
+  // 버튼 상태
+  document.querySelectorAll('.planbtn').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.plan));
+  document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', state[g.dataset.opt]===b.dataset.v)));
+  const fx = FX;
+  const pl0 = PLANS[state.plan]; const hotelIn = parseFloat(document.getElementById('hotel').value);
+  const hotel = hotelIn>0 ? hotelIn : HOTEL_BY_ORDER[pl0.order]; const hotelSrc = hotelIn>0 ? '입력값' : 'Booking.com 시세(2026-10-07)';
+  const {rows,jpy} = calc();
+  const krw = jpy*fx/100 + hotel;
+  document.getElementById('totKrw').textContent = '약 '+fmt(krw/10000)+'만 원';
+  document.getElementById('totJpy').textContent = '현지 비용 '+fmt(won(jpy))+'원('+fmt(jpy)+'엔) + 숙소 '+fmt(hotel)+'원('+hotelSrc+')';
+  document.getElementById('perHead').textContent = '1인 평균 약 '+fmt(krw/N/10000)+'만 원';
+  let h = '<tr><th>항목</th><th>비고</th><th>원 (엔)</th></tr>';
+  for(const r of rows) h += `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(won(r[2]))}원<br><span class="flag" style="color:var(--sub)">${fmt(r[2])}엔</span></td></tr>`;
+  h += `<tr><td>숙소 3박 3실 (${pl0.order==='1'?'포트피아 2박+아리마 1박':'아리마 2박+포트피아 1박'})</td><td class="flag">${hotelSrc}</td><td>${fmt(hotel)}원</td></tr>`;
+  document.getElementById('bd').innerHTML = h;
+  // 점수
+  const sc = SCORE[state.plan];
+  document.getElementById('score').innerHTML = Object.entries(sc).map(([k,v])=>`<div><small>${k}</small><strong>${'●'.repeat(v)}${'○'.repeat(5-v)}</strong></div>`).join('');
+  // 일정
+  const pl = PLANS[state.plan];
+  document.getElementById('planTitle').textContent = pl.name+' · '+pl.short;
+  document.getElementById('planDesc').textContent = pl.desc;
+  const TAGN = {temple:'사찰',food:'미식',shop:'쇼핑',kid:'아이',onsen:'온천',move:'이동'};
+  document.getElementById('days').innerHTML = pl.days.map(([d,stay,items])=>`
+    <div class="day"><div class="dayhead"><b>${d}</b><span>${stay?'숙박 '+stay:'귀국'}</span></div>
+    ${items.map(([t,tag,ti,nt])=>{
+      let title=ti, note=nt;
+      if(state.plan==='rec' && ti.startsWith('외부 온천')){ title = state.bath==='none'?'숙소 휴식·대욕장':(state.bath==='taiko'?'다이코노유':'긴노유'); }
+      if(ti.includes('고베규')){ note = (nt?nt+' · ':'')+BEEF[state.beef].label; }
+      return `<div class="slot"><div class="tm">${t}</div><div>${tag?`<span class="tag ${tag}">${TAGN[tag]}</span>`:''}<span class="ti">${title}</span>${note?`<div class="nt">${note}</div>`:''}</div></div>`;}).join('')}
+    </div>`).join('');
+  try{ localStorage.setItem('trip-state', JSON.stringify(state)); }catch(e){}
+}
+
+function init(){
+  try{ Object.assign(state, JSON.parse(localStorage.getItem('trip-state')||'{}')); }catch(e){}
+  const pp = document.getElementById('planpick');
+  pp.innerHTML = Object.entries(PLANS).map(([k,p])=>`<button class="planbtn" data-k="${k}"><b>${p.name}</b><span>${p.short}</span></button>`).join('');
+  pp.addEventListener('click',e=>{const b=e.target.closest('.planbtn'); if(b){state.plan=b.dataset.k; render();}});
+  document.querySelectorAll('.seg').forEach(g=>{
+    g.innerHTML = OPTS[g.dataset.opt].map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');
+    g.addEventListener('click',e=>{const b=e.target.closest('button'); if(b){state[g.dataset.opt]=b.dataset.v; render();}});
+  });
+  document.getElementById('hotel').addEventListener('input',render);
+  render();
+}
+init();
+</script>
+</body>
+</html>

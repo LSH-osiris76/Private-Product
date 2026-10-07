@@ -212,8 +212,8 @@ a{color:var(--accent)}
   <h2>추가 상품 (Booking.com)</h2>
   <div class="callout warn">2026-10-07 조회 표시가. 1인 가격인지 1팀 가격인지는 상품마다 다르니 상품 페이지에서 인원을 넣어 확인할 것. 「비용에 포함」을 켜면 표시가 1건이 합계에 더해짐. 결제는 각자 진행.</div>
   <div class="prods" id="prodlist"></div>
-  <h3>참고 — 아리마 숙소 대안 (2/6~8, 2박)</h3>
-  <p class="flag" style="color:var(--sub);margin-top:0">현재 예약한 프린세스 아리마는 2박 148만~186만 원(방 구성별, 조식만). 료칸 4곳은 3실·조석식 포함 가격. 8명이 방 하나에 묵는 객실은 예약한 두 호텔에 없어(Booking.com 조회 시 자동으로 여러 실로 나뉨) 시뮬레이터에는 넣지 않았고, 한 공간을 원하면 마지막 독채가 대안임.</p>
+  <h3>참고 — 아리마 숙소 대안</h3>
+  <p class="flag" style="color:var(--sub);margin-top:0">가격은 모두 숙박 기간 전체 합계이며, 여행 일자 그대로 Booking.com에서 조회한 값(2026-10-07)임. 2안 순서는 2/6~8 2박, 1안 순서는 2/8~9 1박. 료칸 4곳은 방 3개·조석식 포함, 독채는 방 1개(한 채)·식사 미포함. 8명이 방 하나에 묵는 객실은 예약한 두 호텔에 없어(Booking.com 조회 시 자동으로 여러 실로 나뉨) 시뮬레이터에는 넣지 않았고, 한 공간을 원하면 마지막 독채가 대안임.</p>
   <div class="prods" id="ryokanlist"></div>
 </section>
 
@@ -366,11 +366,11 @@ const PRODS = [
   {id:'beefSake', nm:'프리미엄 고베규 & 사케 시음 투어', krw:289132, meta:'평점 5.0 (11)', note:'사케 시음은 성인만', url:'https://www.booking.com/attractions/jp/prn1ccry0mzb-premium-kobe-beef-experience-and-sake-tasting-culinary-tour.ko.html'},
 ];
 const RYOKAN = [
-  {nm:'아리마 핫 스프링 료칸 코토리', krw:3825223, meta:'3성 · 평점 8.7 (282) · 노천탕', url:'https://www.booking.com/hotel/jp/kotori.ko.html'},
-  {nm:'아리마 온센 겟코엔 유게츠산소', krw:3967651, meta:'5성 · 평점 8.4 (761) · 노천탕 · 무료 셔틀', url:'https://www.booking.com/hotel/jp/arima-onsen-gekkoen-yugetsusanso.ko.html'},
-  {nm:'네기야 료후카쿠', krw:5696943, meta:'4성 · 평점 9.1 (1,589) · 노천탕 · 엘리베이터', url:'https://www.booking.com/hotel/jp/negiya.ko.html'},
-  {nm:'아리마 온센 토센 고쇼보', krw:6521979, meta:'5성 · 평점 9.3 (867) · 온천가 중심', url:'https://www.booking.com/hotel/jp/tosen-goshobo.ko.html'},
-  {nm:'독채 렌털 「楓 Fū」 아리마 — 8명 한 채', krw:2115224, meta:'평점 8.6 (50) · 독채 · 식사 미포함 · 8명이 한 공간에 묵는 유일한 후보', url:'https://www.booking.com/hotel/jp/hostel-kleine-tasche.ko.html'},
+  {nm:'아리마 핫 스프링 료칸 코토리', k68:3825223, k89:1587060, meta:'3성 · 평점 8.7 (282) · 노천탕', url:'https://www.booking.com/hotel/jp/kotori.ko.html'},
+  {nm:'아리마 온센 겟코엔 유게츠산소', k68:3967651, k89:1763401, meta:'5성 · 평점 8.4 (761) · 노천탕 · 무료 셔틀', url:'https://www.booking.com/hotel/jp/arima-onsen-gekkoen-yugetsusanso.ko.html'},
+  {nm:'네기야 료후카쿠', k68:5696943, k89:2590465, meta:'4성 · 평점 9.1 (1,589) · 노천탕 · 엘리베이터', url:'https://www.booking.com/hotel/jp/negiya.ko.html'},
+  {nm:'아리마 온센 토센 고쇼보', k68:6521979, k89:2986957, meta:'5성 · 평점 9.3 (867) · 온천가 중심', url:'https://www.booking.com/hotel/jp/tosen-goshobo.ko.html'},
+  {nm:'독채 렌털 「楓 Fū」 아리마 — 8명 한 채', k68:2115224, k89:950585, villa:true, meta:'평점 8.6 (50) · 독채 · 식사 미포함 · 8명이 한 공간에 묵는 유일한 후보', url:'https://www.booking.com/hotel/jp/hostel-kleine-tasche.ko.html'},
 ];
 const BLOCKS = {
   free:{n:'자유 시간·숙소 휴식'},
@@ -631,7 +631,7 @@ function render(){
     <div class="stay"><div class="when">${when}</div><div class="nm">${h.nm}</div>
     <div class="meta">${h.en} · ${h.area}</div><div class="meta">${h.rate} · ${h.inout}</div>
     <ul>${h.pts.map(x=>`<li>${x}</li>`).join('')}</ul>
-    <div class="pr">시세 ${fmt(price)}원 <span class="flag" style="font-weight:400">(${R.label}, 2026-10-07 Booking.com)</span></div>
+    <div class="pr">${when.includes('2박')?'2박 합계':'1박'} · 방 ${R.no}개 합계 ${fmt(price)}원 <span class="flag" style="font-weight:400">(${R.label}, 2026-10-07 Booking.com)</span></div>
     <a class="bk" href="${link}" target="_blank" rel="noopener">Booking.com에서 이 날짜로 보기 ↗</a>
     <div class="flag" style="color:var(--sub)">방 ${R.no}개·성인 6명으로 열림. 아이 2명과 방별 인원은 Booking.com 화면에서 직접 지정. 결제는 각자 진행</div></div>`;}).join('');
   document.getElementById('roomcmp').innerHTML = '<tr><th>숙소비 비교 (3박)</th><th>1안 순서</th><th>2안 순서</th></tr>' +
@@ -661,8 +661,8 @@ function init(){
   });
   document.getElementById('hotel').addEventListener('input',render);
   document.getElementById('ryokanlist').innerHTML = RYOKAN.map(r=>`<div class="prod"><div class="nm">${r.nm}</div><div class="meta">${r.meta}</div>
-    <div class="row"><b>${fmt(r.krw)}원</b><span class="flag" style="color:var(--sub)">${r.nm.includes('독채')?'2박·한 채':'2박·3실·조석식'}</span></div>
-    <a href="${r.url}?checkin=2027-02-06&checkout=2027-02-08&no_rooms=3&group_adults=6&selected_currency=KRW" target="_blank" rel="noopener">Booking.com에서 보기 ↗</a></div>`).join('');
+    ${[['2/6~8 · 2박 합계','k68','2027-02-06','2027-02-08'],['2/8~9 · 1박','k89','2027-02-08','2027-02-09']].map(([lb,k,ci,co])=>`<div class="row"><span>${lb} · ${r.villa?'방 1개(한 채)':'방 3개'}</span><b>${fmt(r[k])}원</b></div>
+    <a href="${r.url}?checkin=${ci}&checkout=${co}&no_rooms=${r.villa?1:3}&group_adults=6&selected_currency=KRW" target="_blank" rel="noopener">${lb.split(' ')[0]} Booking.com에서 보기 ↗</a>`).join('')}</div>`).join('');
   document.getElementById('prodlist').addEventListener('change',e=>{const id=e.target.dataset.prod; if(!id) return; state.prods = e.target.checked ? [...new Set([...state.prods,id])] : state.prods.filter(x=>x!==id); render();});
   document.getElementById('slotpicks').addEventListener('change',e=>{const k=e.target.dataset.key; if(k){state.cSel[k]=e.target.value; render();}});
   render();

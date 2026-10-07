@@ -101,6 +101,15 @@ details.fold[open]>summary::after{content:'접기 ▴'}
 .daytabs button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
 .daytabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .sticky-total{display:none}
+.stays{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media (max-width:640px){.stays{grid-template-columns:1fr}}
+.stay{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg)}
+.stay .when{font-size:12.5px;color:var(--accent);font-weight:700}
+.stay .nm{font-size:16px;font-weight:700;margin:2px 0}
+.stay .meta{font-size:13px;color:var(--sub)}
+.stay ul{margin:6px 0 0;padding-left:16px;font-size:13.5px}
+.stay .pr{margin-top:6px;font-weight:700}
+.stay a.bk{display:block;text-align:center;margin-top:10px;padding:10px;border-radius:10px;background:#003b95;color:#fff;text-decoration:none;font-weight:700;font-size:14px}
 @media (max-width:640px){
   body{font-size:15.5px}
   .hero h1{font-size:23px}
@@ -175,6 +184,7 @@ a{color:var(--accent)}
   <div class="card" style="margin-top:12px">
     <h3 style="margin-top:0" id="planTitle"></h3>
     <p class="nt" id="planDesc" style="margin:0;color:var(--sub)"></p>
+    <div class="stays" id="stays"></div>
     <div class="daytabs" id="daytabs"></div>
     <div id="days"></div>
   </div>
@@ -305,6 +315,20 @@ const HOTEL = {
   port68:902047, arima68:1707566, port89:426258, arima89:632844,
 };
 const HOTEL_BY_ORDER = {'1':HOTEL.port68+HOTEL.arima89, '2':HOTEL.arima68+HOTEL.port89};
+const HOTEL_INFO = {
+  port:{nm:'고베 포트피아 호텔', en:'Kobe Portopia Hotel', area:'포트아일랜드 · 공항 약 15분',
+    rate:'Booking.com 8.7점 (리뷰 6,240)', inout:'체크인 15:00 · 체크아웃 11:00',
+    pts:['포트라이너 시민히로바역 바로 앞','산노미야 무료 셔틀 20분 간격(약 20분)','조식 미포함 요금 · 주차 1일 1,000엔','대욕장은 유료, 18세 미만 이용 불가'],
+    url:'https://www.booking.com/hotel/jp/kobe-portopia.html'},
+  arima:{nm:'더 그랜드 리조트 프린세스 아리마', en:'The Gran Resort Princess Arima', area:'아리마 온천가 고지대 · 공항 약 1시간 10분',
+    rate:'Booking.com 7.6점 (리뷰 339)', inout:'체크인 15:00 · 체크아웃 10:00',
+    pts:['아리마온센역에서 무료 송영(시각은 호텔 문의)','조식 포함 · 석식 별도','온천 대욕장 15:00~23:00 · 06:00~10:00','실내 온수 수영장'],
+    url:'https://www.booking.com/hotel/jp/the-gran-resort-princess-arima.html'},
+};
+const STAYS = {
+  '1':[['port','2/6(토) ~ 2/8(월) · 2박',HOTEL.port68,'2027-02-06','2027-02-08'],['arima','2/8(월) ~ 2/9(화) · 1박',HOTEL.arima89,'2027-02-08','2027-02-09']],
+  '2':[['arima','2/6(토) ~ 2/8(월) · 2박',HOTEL.arima68,'2027-02-06','2027-02-08'],['port','2/8(월) ~ 2/9(화) · 1박',HOTEL.port89,'2027-02-08','2027-02-09']],
+};
 
 const ATT = {
   zoo:     {name:'고베 동물왕국', p:P(2400,1900,500)},
@@ -496,10 +520,17 @@ function render(){
   document.getElementById('planTitle').textContent = pl.name+' · '+pl.short;
   document.getElementById('planDesc').textContent = pl.desc;
   const TAGN = {temple:'사찰',food:'미식',shop:'쇼핑',kid:'아이',onsen:'온천',move:'이동'};
+  document.getElementById('stays').innerHTML = STAYS[pl.order].map(([k,when,price,ci,co])=>{const h=HOTEL_INFO[k]; const link=`${h.url}?checkin=${ci}&checkout=${co}&no_rooms=3&group_adults=6&selected_currency=KRW&lang=ko`; return `
+    <div class="stay"><div class="when">${when}</div><div class="nm">${h.nm}</div>
+    <div class="meta">${h.en} · ${h.area}</div><div class="meta">${h.rate} · ${h.inout}</div>
+    <ul>${h.pts.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <div class="pr">시세 ${fmt(price)}원 <span class="flag" style="font-weight:400">(3실, 2026-10-07 Booking.com)</span></div>
+    <a class="bk" href="${link}" target="_blank" rel="noopener">Booking.com에서 이 날짜로 보기 ↗</a>
+    <div class="flag" style="color:var(--sub)">방 3개·성인 6명으로 열림. 아이 2명은 Booking.com 화면에서 직접 추가. 결제는 각자 진행</div></div>`;}).join('');
   const tabs = ['전체'].concat(pl.days.map(d=>d[0]));
   document.getElementById('daytabs').innerHTML = tabs.map((t,i)=>`<button data-i="${i-1}" aria-pressed="${state.day===i-1}">${t}</button>`).join('');
   document.getElementById('days').innerHTML = pl.days.filter((_,i)=>state.day<0||state.day===i).map(([d,stay,items])=>`
-    <div class="day"><div class="dayhead"><b>${d}</b><span>${stay?'숙박 '+stay:'귀국'}</span></div>
+    <div class="day"><div class="dayhead"><b>${d}</b><span>${stay?'숙박 · '+(stay==='아리마'?HOTEL_INFO.arima.nm:HOTEL_INFO.port.nm):'귀국일'}</span></div>
     ${items.map(([t,tag,ti,nt])=>{
       let title=ti, note=nt;
       if(state.plan==='rec' && ti.startsWith('외부 온천')){ title = state.bath==='none'?'숙소 휴식·대욕장':(state.bath==='taiko'?'다이코노유':'긴노유'); }

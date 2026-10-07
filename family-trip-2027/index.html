@@ -93,6 +93,29 @@ ol.key li{margin:6px 0}
 .score small{display:block;color:var(--sub);font-size:12px}
 .score strong{font-size:15px}
 footer{margin-top:40px;color:var(--sub);font-size:12.5px}
+details.fold>summary{cursor:pointer;list-style:none;font-weight:600;padding:10px 0;display:flex;justify-content:space-between;align-items:center}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:'펼치기 ▾';font-size:12.5px;color:var(--sub);font-weight:400}
+details.fold[open]>summary::after{content:'접기 ▴'}
+.daytabs{display:flex;gap:6px;overflow-x:auto;margin:12px 0 4px;padding-bottom:2px}
+.daytabs button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
+.daytabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.sticky-total{display:none}
+@media (max-width:640px){
+  body{font-size:15.5px}
+  .hero h1{font-size:23px}
+  .card{padding:14px}
+  .planbtn{min-height:58px}
+  .seg button{padding:9px 12px;min-height:40px}
+  .total{display:none}
+  .sticky-total{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--card);border-top:1px solid var(--line);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:8px;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+  .sticky-total b{font-size:20px}
+  .sticky-total span{font-size:12.5px;color:var(--sub)}
+  .sticky-total a{font-size:13px;white-space:nowrap}
+  .wrap{padding-bottom:96px}
+  .tbl{font-size:13.5px}
+}
 a{color:var(--accent)}
 </style>
 </head>
@@ -146,12 +169,13 @@ a{color:var(--accent)}
       <span class="sm" id="totJpy"></span>
       <span class="sm" id="perHead"></span>
     </div>
-    <div class="tblwrap breakdown"><table class="tbl" id="bd"></table></div>
+    <details class="fold breakdown" id="bdwrap"><summary>비용 상세</summary><div class="tblwrap"><table class="tbl" id="bd"></table></div></details>
     <p class="flag">요금 구분: 성인(고등학생 포함) 5 · 시니어 2 · 유아 1. 2/8(월)은 일본 평일이라 평일 요금 적용. 시니어 할인은 할인이 있는 시설만 적용함. 쇼핑은 개인 지출이라 제외함.</p>
   </div>
   <div class="card" style="margin-top:12px">
     <h3 style="margin-top:0" id="planTitle"></h3>
     <p class="nt" id="planDesc" style="margin:0;color:var(--sub)"></p>
+    <div class="daytabs" id="daytabs"></div>
     <div id="days"></div>
   </div>
 </section>
@@ -254,6 +278,7 @@ a{color:var(--accent)}
   </div>
 </section>
 
+<div class="sticky-total"><div><b id="stTot">-</b><br><span id="stSub"></span></div><a href="#bdwrap" onclick="document.getElementById('bdwrap').open=true">비용 상세</a></div>
 <footer>가족 공유용 페이지 · 개인정보(나이·이름·예약번호)는 싣지 않음</footer>
 </div>
 
@@ -409,7 +434,7 @@ const OPTS = {
   arimaDinner:[['sep','별도 결제 ⚠️'],['incl','석식 포함 플랜']],
   bath:[['taiko','다이코노유'],['ginno','긴노유'],['none','숙소 대욕장만']],
 };
-const state = {plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
+const state = {day:-1, plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
 
 const FX = 846.17; // 원/100엔, 2026-10-07 11:00 기준환율 고정
 const won = y => y*FX/100;
@@ -457,6 +482,8 @@ function render(){
   document.getElementById('totKrw').textContent = '약 '+fmt(krw/10000)+'만 원';
   document.getElementById('totJpy').textContent = '현지 비용 '+fmt(won(jpy))+'원('+fmt(jpy)+'엔) + 숙소 '+fmt(hotel)+'원('+hotelSrc+')';
   document.getElementById('perHead').textContent = '1인 평균 약 '+fmt(krw/N/10000)+'만 원';
+  document.getElementById('stTot').textContent = '약 '+fmt(krw/10000)+'만 원';
+  document.getElementById('stSub').textContent = PLANS[state.plan].name+' · 1인 약 '+fmt(krw/N/10000)+'만 원';
   let h = '<tr><th>항목</th><th>비고</th><th>원 (엔)</th></tr>';
   for(const r of rows) h += `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(won(r[2]))}원<br><span class="flag" style="color:var(--sub)">${fmt(r[2])}엔</span></td></tr>`;
   h += `<tr><td>숙소 3박 3실 (${pl0.order==='1'?'포트피아 2박+아리마 1박':'아리마 2박+포트피아 1박'})</td><td class="flag">${hotelSrc}</td><td>${fmt(hotel)}원</td></tr>`;
@@ -469,7 +496,9 @@ function render(){
   document.getElementById('planTitle').textContent = pl.name+' · '+pl.short;
   document.getElementById('planDesc').textContent = pl.desc;
   const TAGN = {temple:'사찰',food:'미식',shop:'쇼핑',kid:'아이',onsen:'온천',move:'이동'};
-  document.getElementById('days').innerHTML = pl.days.map(([d,stay,items])=>`
+  const tabs = ['전체'].concat(pl.days.map(d=>d[0]));
+  document.getElementById('daytabs').innerHTML = tabs.map((t,i)=>`<button data-i="${i-1}" aria-pressed="${state.day===i-1}">${t}</button>`).join('');
+  document.getElementById('days').innerHTML = pl.days.filter((_,i)=>state.day<0||state.day===i).map(([d,stay,items])=>`
     <div class="day"><div class="dayhead"><b>${d}</b><span>${stay?'숙박 '+stay:'귀국'}</span></div>
     ${items.map(([t,tag,ti,nt])=>{
       let title=ti, note=nt;
@@ -485,6 +514,7 @@ function init(){
   const pp = document.getElementById('planpick');
   pp.innerHTML = Object.entries(PLANS).map(([k,p])=>`<button class="planbtn" data-k="${k}"><b>${p.name}</b><span>${p.short}</span></button>`).join('');
   pp.addEventListener('click',e=>{const b=e.target.closest('.planbtn'); if(b){state.plan=b.dataset.k; render();}});
+  document.getElementById('daytabs').addEventListener('click',e=>{const b=e.target.closest('button'); if(b){state.day=+b.dataset.i; render();}});
   document.querySelectorAll('.seg').forEach(g=>{
     g.innerHTML = OPTS[g.dataset.opt].map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');
     g.addEventListener('click',e=>{const b=e.target.closest('button'); if(b){state[g.dataset.opt]=b.dataset.v; render();}});

@@ -87,8 +87,8 @@ ol.key li{margin:6px 0}
 .tag.temple{background:var(--temple)} .tag.food{background:var(--food)} .tag.shop{background:var(--shop)}
 .tag.kid{background:var(--kid)} .tag.onsen{background:var(--onsen)} .tag.move{background:var(--move)}
 .flag{font-size:12px;color:var(--warn)}
-.score{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-@media (max-width:640px){.score{grid-template-columns:1fr 1fr}}
+.score{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+@media (max-width:640px){.score{grid-template-columns:repeat(3,1fr)}}
 .score div{background:var(--bg);border-radius:10px;padding:8px 10px}
 .score small{display:block;color:var(--sub);font-size:12px}
 .score strong{font-size:15px}
@@ -160,12 +160,11 @@ a{color:var(--accent)}
   <h2>정리</h2>
   <div class="card">
     <ol class="key">
-      <li>숙소는 <b>2안 순서(아리마 2박 → 포트피아 1박)</b>를 권장함. 귀국일 공항까지 약 15분이라 15:30 출발에 여유가 크고, 둘째 날을 아리마에서 쉬며 사찰을 둘러볼 수 있음. 비용을 우선하면 1안이 60만~70만 원 저렴함</li>
-      <li>여행 기간이 한국 설 연휴(2/5~8)·중국 춘절(2/6)과 겹침. 고베규 식당·안판만 뮤지엄은 미리 예약해야 함</li>
-      <li>장인어른 사찰은 <b>나카야마데라</b>가 1순위. 엘리베이터가 있어 어르신 동선에 맞음(경내 전 구역은 아님)</li>
-      <li>8명 고베규는 <b>Ishida. 이쿠타신미치점</b>(10~14명 개별실, 아이 동반 가능)이 조건에 가장 맞음</li>
-      <li>숙소 시세는 순서에 따라 크게 다름. Booking.com 조회 기준 2실(남성 3 / 여성·아이 5)이면 <b>1안 약 160만 원, 2안 약 229만 원</b>, 가족별 3실이면 1안 약 153만 원, 2안 약 213만 원, 아리마만 독채 1채로 바꾸면 1안 약 191만 원, 2안 약 255만 원(독채는 식사 별도). 2안은 아리마가 토·일 연휴 밤이라 60만~70만 원 비쌈 (2026-10-07 조회, 실제 예약 금액은 다를 수 있음)</li>
-      <li>여행 기간에 못 가는 곳: 누노비키 허브원(2/19까지 휴원), 킨노유(2/9 휴관)</li>
+      <li>숙소 순서는 <b>시내 2박 → 온천 1박</b>(지금 예약)과 <b>온천 1박 → 시내 2박</b> 중에서 고르는 중임. 아래 시뮬레이터의 「숙소 순서 비교」에서 장단점과 비용을 나란히 보고 정하면 됨</li>
+      <li>어느 순서든 시내 하루는 사찰·쇼핑 날로 씀. 오전 나카야마데라(산노미야에서 전철 약 50분 ⚠️, 엘리베이터 있음), 오후 산노미야 고베규·이쿠타 신사·센터가이·다이마루, 저녁 난킨마치</li>
+      <li>숙소비(3박 합계, 가족별 3실): 시내 먼저 약 153만 원, 온천 먼저 약 174만 원. 온천 먼저는 아리마가 토요일 연휴 밤이 되어 비쌈. 2실이면 약 160만 원 / 188만 원, 아리마 독채면 둘 다 약 191만 원 (Booking.com 조회, 실제 예약 금액은 다를 수 있음)</li>
+      <li>시내 먼저는 귀국일 아리마→공항 약 1시간 10분이라 대형택시·전용차 예약이 필수이고, 킨노유(2/9 휴관)는 월요일에 가야 함. 온천 먼저는 예약 두 건의 날짜를 모두 바꿔야 함</li>
+      <li>여행 기간이 한국 설 연휴(2/5~8)·중국 춘절(2/6)과 겹침. 고베규 식당(<b>Ishida. 이쿠타신미치점</b>, 10~14명 개별실)은 미리 예약해야 함. 누노비키 허브원은 2/19까지 휴원</li>
     </ol>
     <div class="callout warn">엔화 비용은 2026-10-07 11:00 기준환율 100엔 = 846.17원으로 고정해 원화로 표시함. 비용은 공개 요금 기준 계산이며 ⚠️ 표시는 추정치임. 숙소는 Booking.com 시세가 기본값이고, 실제 결제액을 입력하면 그 값으로 바뀜.</div>
   </div>
@@ -173,6 +172,12 @@ a{color:var(--accent)}
 
 <section id="sim">
   <h2>일정·비용 시뮬레이터</h2>
+  <div class="card" style="margin-bottom:12px">
+    <h3 style="margin-top:0">숙소 순서 비교</h3>
+    <p class="flag" style="color:var(--sub);margin-top:0">버튼을 누르면 아래 일정·비용이 그 순서로 바뀜. 숙소비는 아래에서 고른 방 구성 기준.</p>
+    <div class="planpick" id="orderpick" style="grid-template-columns:1fr 1fr"></div>
+    <div class="tblwrap" style="margin-top:10px"><table class="tbl" id="ordercmp"></table></div>
+  </div>
   <div class="card">
     <div class="planpick" id="planpick"></div>
     <div id="customBox" class="card" style="background:var(--bg)">
@@ -213,7 +218,7 @@ a{color:var(--accent)}
   <div class="callout warn">2026-10-07 조회 표시가. 1인 가격인지 1팀 가격인지는 상품마다 다르니 상품 페이지에서 인원을 넣어 확인할 것. 「비용에 포함」을 켜면 표시가 1건이 합계에 더해짐. 결제는 각자 진행.</div>
   <div class="prods" id="prodlist"></div>
   <h3>참고 — 아리마 숙소 대안</h3>
-  <p class="flag" style="color:var(--sub);margin-top:0">가격은 모두 숙박 기간 전체 합계이며, 여행 일자 그대로 Booking.com에서 조회한 값(2026-10-07)임. 2안 순서는 2/6~8 2박, 1안 순서는 2/8~9 1박. 료칸 4곳은 방 3개·조석식 포함, 독채는 방 1개(한 채)·식사 미포함. 8명이 방 하나에 묵는 객실은 예약한 두 호텔에 없음(Booking.com 조회 시 자동으로 여러 실로 나뉨). 마지막 독채는 시뮬레이터 「방 구성」에서 「아리마 독채 1채」로 골라 볼 수 있음.</p>
+  <p class="flag" style="color:var(--sub);margin-top:0">가격은 시내 먼저 순서의 아리마 숙박(2/8~9 월요일, 1박)으로 Booking.com에서 조회한 값(2026-10-07)임. 온천 먼저면 토요일 밤이라 더 비쌀 수 있음(독채는 2/6~7 1박 1,152,538원, 2026-10-10 조회). 료칸 4곳은 방 3개·조석식 포함, 독채는 방 1개(한 채)·식사 미포함. 8명이 방 하나에 묵는 객실은 예약한 두 호텔에 없음(Booking.com 조회 시 자동으로 여러 실로 나뉨). 마지막 독채는 시뮬레이터 「방 구성」에서 「아리마 독채 1채」로 골라 볼 수 있음.</p>
   <div class="prods" id="ryokanlist"></div>
 </section>
 
@@ -225,10 +230,10 @@ a{color:var(--accent)}
       <tr><th style="width:26%">항목</th><th style="width:12%">판정</th><th>내용</th></tr>
       <tr><td>숙소 선택</td><td><span class="mark o">좋음</span></td><td>공항 15분 시내 호텔 + 온천 리조트 조합이 이 일정에 맞음</td></tr>
       <tr><td>요일 표기</td><td><span class="mark x">수정</span></td><td>2/6은 금요일이 아니라 토요일임. 휴무일 판단이 요일에 걸려 있어 바로잡아야 함</td></tr>
-      <tr><td>숙소 순서(1안)</td><td><span class="mark t">주의</span></td><td>귀국일 아리마→공항 약 1시간 10분. 15:30 출발이면 대형택시 사전예약이 전제임. 2안은 이 부담이 없음</td></tr>
+      <tr><td>숙소 순서(1안)</td><td><span class="mark t">선택 중</span></td><td>온천 먼저 순서와 비교해 고르는 중. 이 순서면 귀국일 아리마→공항 약 1시간 10분이라 대형택시·전용차 사전예약이 전제임</td></tr>
       <tr><td>기타노 이진칸 산책</td><td><span class="mark t">주의</span></td><td>언덕·계단이 많은 지역이라 어르신은 짧게 보거나 빼는 편이 좋음 ⚠️</td></tr>
       <tr><td>롯코산 야경</td><td><span class="mark t">주의</span></td><td>2월 정상부는 영하·결빙. 어르신·유치원생과 밤에 오르면 부담이 큼</td></tr>
-      <tr><td>사찰</td><td><span class="mark x">보완</span></td><td>장인어른 선호인 사찰 일정이 없음 → 나카야마데라·온센지 추가</td></tr>
+      <tr><td>사찰</td><td><span class="mark x">보완</span></td><td>장인어른 선호인 사찰 일정이 없음 → 시내 숙박일에 나카야마데라·이쿠타 신사, 아리마에서 온센지 추가</td></tr>
       <tr><td>쇼핑</td><td><span class="mark x">보완</span></td><td>쇼핑 시간이 따로 없음 → 산노미야·모토마치·다이마루 반나절 배정</td></tr>
       <tr><td>아이 일정</td><td><span class="mark t">보완</span></td><td>유치원생 몫이 없음 → 동물왕국·안판만 뮤지엄 중 하나 추가</td></tr>
     </table></div>
@@ -260,6 +265,17 @@ a{color:var(--accent)}
 
 <section id="places">
   <h2>추천 장소</h2>
+  <h3 style="margin-top:0">시내에 묵으며 다녀올 수 있는 사찰</h3>
+  <div class="tblwrap card"><table class="tbl">
+    <tr><th style="width:20%">사찰</th><th style="width:27%">산노미야에서</th><th style="width:25%">어르신 동선</th><th>함께 묶을 쇼핑·식사</th></tr>
+    <tr><td><span class="tag temple">사찰</span> 이쿠타 신사</td><td>도보 약 10분</td><td>시내 평지</td><td>센터가이·모토마치·다이마루, 고베규(Ishida.가 신사 근처)</td></tr>
+    <tr><td><span class="tag temple">사찰</span> 나카야마데라 (다카라즈카)</td><td>한큐 니시노미야키타구치·다카라즈카 환승 → 나카야마칸논역 도보 약 1분. 약 50분 ⚠️</td><td>엘리베이터 09:00~16:30·에스컬레이터 있음, 입장 무료. 전용 주차장 없음</td><td>오전에 다녀와 오후 산노미야 런치·쇼핑</td></tr>
+    <tr><td><span class="tag temple">사찰</span> 기요시코진 세이초지</td><td>나카야마칸논역에서 한큐 두 정거장(기요시코진역)</td><td>⚠️ 역에서 오르막 참배길 약 15분. 차로 가면 주차장(유료)에서 짧음</td><td>참배길 상점·노점 약 200곳. 나카야마데라와 같은 날 묶을 수 있음</td></tr>
+    <tr><td><span class="tag temple">사찰</span> 미나토가와 신사</td><td>JR 두 정거장(고베역) → 도보 약 3분</td><td>시내 평지(단차 정보 미확보), 참배 무료</td><td>하버랜드 우미에·안판만 뮤지엄과 같은 고베역 권역</td></tr>
+    <tr><td><span class="tag temple">사찰</span> 스마데라</td><td>한신·산요 전철 → 스마데라역 도보 약 5분. 직통특급은 스마데라역에 서지 않아 보통으로 갈아타야 함</td><td>계단 정보 미확보, 08:30~17:00 무료</td><td>주변 쇼핑 연계는 약함 → 반나절 따로 잡아야 함</td></tr>
+  </table></div>
+  <p class="flag" style="color:var(--sub)">▶ 시내 2박이어도 나카야마데라(오전)+산노미야 쇼핑(오후)을 하루에 묶을 수 있음. 오후가 남으면 미나토가와 신사+우미에를 이어 붙임. 전철 소요시간은 ⚠️ 추정이니 출발 전 환승 앱으로 확인할 것.</p>
+  <h3>그 밖의 추천 장소</h3>
   <div class="tblwrap card"><table class="tbl">
     <tr><th style="width:16%">분류</th><th style="width:30%">장소</th><th>이유</th></tr>
     <tr><td><span class="tag temple">사찰</span></td><td>나카야마데라 (다카라즈카)</td><td>엘리베이터(09:00~16:30)·에스컬레이터, 입장 무료. 경내 전 구역이 휠체어 가능한 것은 아님</td></tr>
@@ -280,7 +296,9 @@ a{color:var(--accent)}
   <h2>확인 필요</h2>
   <div class="tblwrap card"><table class="tbl">
     <tr><th style="width:38%">항목</th><th>확인처</th><th style="width:22%">언제</th></tr>
-    <tr><td>숙소 1안·2안 중 확정, 안 쓰는 예약 취소 기한</td><td>예약 사이트</td><td>지금</td></tr>
+    <tr><td>숙소 순서 결정 후 예약 정리 — 시내 먼저면 2안 예약 취소, 온천 먼저면 아리마 2/6~7·포트피아 2/7~9로 날짜 변경</td><td>예약 사이트</td><td>지금</td></tr>
+    <tr><td>(시내 먼저일 때) 귀국일 아리마→공항 대형택시·전용차 예약</td><td>MK택시·Booking.com 전용차</td><td>출발 1개월 전</td></tr>
+    <tr><td>(온천 먼저일 때) 체크아웃 후 아리마 온천가 산책 동안 짐 맡길 곳</td><td>호텔 프런트·아리마온센역</td><td>출발 2주 전</td></tr>
     <tr><td>5인 1실(성인 3·아이 2) 객실이 실제로 있는지, 엑스트라 베드 요금</td><td>두 호텔</td><td>지금</td></tr>
     <tr><td>프린세스 아리마 송영버스 시각, 8명+짐 탑승</td><td>호텔 078-904-1566</td><td>출발 2주 전</td></tr>
     <tr><td>프린세스 아리마 석식 — 시세 요금은 조식만 포함. 석식 플랜 추가 여부</td><td>예약 플랜·호텔</td><td>지금</td></tr>
@@ -301,7 +319,8 @@ a{color:var(--accent)}
       <li><a href="https://enjoy-osaka-kyoto-kobe.com/ja/article/a/arima-onsen-access/">아리마 온천 교통(버스·전철 요금)</a></li>
       <li><a href="https://koberope.jp/rokko/price/">롯코-아리마 로프웨이 요금·시간</a> · <a href="https://www.rokkocable.com/">롯코 케이블</a></li>
       <li><a href="https://www.data.jma.go.jp/obd/stats/etrn/view/nml_sfc_ym.php?prec_no=63&block_no=47770">일본 기상청 고베 평년값</a></li>
-      <li><a href="https://www.nakayamadera.or.jp/faq/">나카야마데라 FAQ</a> · <a href="https://ikutajinja.or.jp/">이쿠타 신사</a></li>
+      <li><a href="https://www.nakayamadera.or.jp/faq/">나카야마데라 FAQ</a> · <a href="https://www.nakayamadera.or.jp/about/access.html">나카야마데라 교통</a> · <a href="https://ikutajinja.or.jp/">이쿠타 신사</a></li>
+      <li><a href="https://www.kiyoshikojin.or.jp/">기요시코진 세이초지</a> · <a href="https://rurubu.jp/andmore/spot/80029346">미나토가와 신사(rurubu)</a> · <a href="https://www.sumadera.or.jp/">스마데라</a> · <a href="https://www.gltjp.com/ja/directory/item/18559/">스마데라 교통(GLT JAPAN)</a></li>
       <li><a href="https://www.city.kobe.lg.jp/a64051/kanko/kisyasiryo/202602/342205980651.html">고베시 킨노유 재개장 안내</a> · <a href="https://www.asoview.com/note/5625/">킨노유·긴노유</a> · <a href="https://www.asoview.com/note/5695/">다이코노유</a></li>
       <li><a href="https://www.kobeherb.com/infomation/hours_fare/">누노비키 허브원 영업 안내</a></li>
       <li><a href="https://r.gnavi.co.jp/c192809/">Ishida. 이쿠타신미치점(구루나비)</a> · <a href="https://r.gnavi.co.jp/k062102/">로열 모리야</a></li>
@@ -334,6 +353,7 @@ const SEG = {
   'port-arima':{name:'포트피아 ↔ 아리마', pub:P(780,780,390,true), taxi:11000},
   'city':      {name:'시내 이동(하루)', pub:P(800,800,400,true), taxi:4000},
   'nakayama':  {name:'나카야마데라 왕복', pub:P(1200,1200,600,true), taxi:14000},
+  'nakaCity':  {name:'산노미야 ↔ 나카야마데라 왕복', pub:P(800,800,400,true), taxi:22000},
   'rokko':     {name:'롯코 케이블+로프웨이', pub:P(800+1400+400,800+1400+400,400+700+200,true), taxi:null},
   'himeji':    {name:'히메지 왕복', pub:P(2000,2000,1000,true), taxi:null},
 };
@@ -342,15 +362,17 @@ const RENT = {perDay:28000, days:3, extraPerDay:3000, portParking:1000}; // 8인
 // 방 구성별 시세(원) — Booking.com 2026-10-07 조회
 // split2: 남성 방(성인 3) + 여성·아이 방(성인 3·아이 2) 각각 1실 조회 후 합산 / fam3: 가족별 3실(성인 6·아이 2, 3실 자동 배분)
 const ROOMS = {
-  split2:{label:'2실 · 남성 3 / 여성·아이 5', no:2, port68:367401+592913, arima68:647402+1212595, port89:163057+269621, arima89:246629+390497},
-  fam3:  {label:'3실 · 가족별', no:3, port68:902047, arima68:1707566, port89:426258, arima89:632844},
+  // arima67·port79: 온천 먼저 순서(아리마 2/6~7, 포트피아 2/7~9) — Booking.com 2026-10-10 조회, 같은 조건
+  split2:{label:'2실 · 남성 3 / 여성·아이 5', no:2, port68:367401+592913, arima68:647402+1212595, port89:163057+269621, arima89:246629+390497, arima67:396609+727963, port79:288304+466625},
+  fam3:  {label:'3실 · 가족별', no:3, port68:902047, arima68:1707566, port89:426258, arima89:632844, arima67:1022878, port79:713286},
   // villa: 아리마만 독채 「楓 Fū」 1채(방 1개·식사 미포함), 포트피아는 2실 그대로
-  villa: {label:'아리마 독채 1채 + 포트피아 2실', no:2, villa:true, port68:367401+592913, arima68:2115224, port89:163057+269621, arima89:950585},
+  villa: {label:'아리마 독채 1채 + 포트피아 2실', no:2, villa:true, port68:367401+592913, arima68:2115224, port89:163057+269621, arima89:950585, arima67:1152538, port79:288304+466625},
 };
 const VILLA = {nm:'독채 렌털 「楓 Fū」 아리마', en:'貸別荘 楓-Fū- 有馬', area:'아리마 온천가 · 공항 약 1시간 10분',
   rate:'Booking.com 8.6점 (리뷰 50)', pts:['8명이 한 채에 묵음 (방 1개)','식사 미포함 — 조식·석식은 따로','하우스키핑·전용 주차'],
   url:'https://www.booking.com/hotel/jp/hostel-kleine-tasche.html'};
-const hotelBy = (r,o) => o==='1' ? ROOMS[r].port68+ROOMS[r].arima89 : ROOMS[r].arima68+ROOMS[r].port89;
+const hotelBy = (r,o) => o==='1' ? ROOMS[r].port68+ROOMS[r].arima89 : o==='3' ? ROOMS[r].arima67+ROOMS[r].port79 : ROOMS[r].arima68+ROOMS[r].port89;
+const ORDER_TXT = {'1':'포트피아 2박+아리마 1박','2':'아리마 2박+포트피아 1박','3':'아리마 1박+포트피아 2박'};
 const HOTEL_INFO = {
   port:{nm:'고베 포트피아 호텔', en:'Kobe Portopia Hotel', area:'포트아일랜드 · 공항 약 15분',
     rate:'Booking.com 8.7점 (리뷰 6,240)', inout:'체크인 15:00 · 체크아웃 11:00',
@@ -380,7 +402,9 @@ const RYOKAN = [
 const BLOCKS = {
   free:{n:'자유 시간·숙소 휴식'},
   arimaWalk:{n:'아리마 온천가·온센지 산책', tag:'temple'},
-  nakayama:{n:'나카야마데라', tag:'temple', seg:'nakayama'},
+  nakayama:{n:'나카야마데라', tag:'temple', seg:'nakaCity'},
+  kiyoshi:{n:'나카야마데라 + 기요시코진', tag:'temple', seg:'nakaCity'},
+  minato:{n:'미나토가와 신사 + 우미에', tag:'temple', seg:'city'},
   ikutaShop:{n:'이쿠타 신사 + 센터가이·다이마루 쇼핑', tag:'shop', seg:'city'},
   outlet:{n:'마린피아 아울렛', tag:'shop', seg:'city'},
   beef:{n:'고베규 식사', tag:'food', beef:true},
@@ -393,15 +417,22 @@ const BLOCKS = {
   rokko:{n:'롯코산 케이블·로프웨이', tag:'move', seg:'rokko'},
   hotelDinner:{n:'숙소 저녁', tag:'food', dinner:true},
 };
-const SLOTS = [
+const SLOTS_BY = {
+ '1':[
+  ['2/6 토',[['18:00','저녁','meriken']]],
+  ['2/7 일',[['10:00','오전','nakayama'],['13:00','오후','ikutaShop'],['18:00','저녁','nankin']]],
+  ['2/8 월',[['10:00','오전','zoo'],['15:30','오후','arimaWalk'],['18:00','저녁','hotelDinner']]],
+  ['2/9 화',[['11:00','오전','ikutaShop']]]],
+ '3':[
   ['2/6 토',[['18:00','저녁','hotelDinner']]],
-  ['2/7 일',[['10:00','오전','arimaWalk'],['13:30','오후','nakayama'],['18:00','저녁','hotelDinner']]],
-  ['2/8 월',[['10:00','오전','ikutaShop'],['13:00','오후','beef'],['18:00','저녁','nankin']]],
-  ['2/9 화',[['10:00','오전','zoo']]],
-];
+  ['2/7 일',[['10:00','오전','arimaWalk'],['14:00','오후','ikutaShop'],['18:00','저녁','nankin']]],
+  ['2/8 월',[['10:00','오전','nakayama'],['13:00','오후','beef'],['16:00','늦은 오후','minato']]],
+  ['2/9 화',[['10:00','오전','zoo']]]],
+};
 const STAYS = {
   '1':[['port','2/6(토) ~ 2/8(월) · 2박','port68','2027-02-06','2027-02-08'],['arima','2/8(월) ~ 2/9(화) · 1박','arima89','2027-02-08','2027-02-09']],
   '2':[['arima','2/6(토) ~ 2/8(월) · 2박','arima68','2027-02-06','2027-02-08'],['port','2/8(월) ~ 2/9(화) · 1박','port89','2027-02-08','2027-02-09']],
+  '3':[['arima','2/6(토) ~ 2/7(일) · 1박','arima67','2027-02-06','2027-02-07'],['port','2/7(일) ~ 2/9(화) · 2박','port79','2027-02-07','2027-02-09']],
 };
 
 const ATT = {
@@ -425,6 +456,76 @@ const VILLA_BREAKFAST = P(1500,1500,700,true); // 독채 조식(빵집·편의�
 // ===== 일정 =====
 // item: [시각, 태그, 제목, 메모, 비용키]
 const PLANS = {
+  fin:{name:'시내 먼저', short:'포트피아 2박 → 아리마 1박', arimaNights:1, order:'1', bathDay:'wd',
+    desc:'지금 예약 그대로. 일요일을 사찰·쇼핑 날로 쓰고 월요일 오후 아리마로. 귀국일은 산노미야에 들러 마지막 쇼핑 후 공항.',
+    segs:['air-port','city','nakaCity','city','port-arima','air-arima'], att:['tower','zoo','bath'], beef:true, extra:[],
+    days:[
+      ['2/6 토','포트피아',[
+        ['14:45','move','고베공항 도착 ⚠️','도착 시각은 동계 스케줄 확인 필요'],
+        ['15:30','move','포트피아 체크인','공항에서 약 15분'],
+        ['17:00','kid','메리켄파크·포트타워','엘리베이터 전망층'],
+        ['18:30','shop','하버랜드 우미에 저녁·쇼핑','대형몰·면세 안내, 21:00까지'],
+        ['20:30','move','포트피아 복귀','택시 또는 산노미야 셔틀']]],
+      ['2/7 일','포트피아',[
+        ['09:00','move','산노미야 → 나카야마데라','한큐 환승 2회 약 50분 ⚠️ · 택시면 문 앞 하차'],
+        ['10:00','temple','나카야마데라','엘리베이터 09:00~16:30, 입장 무료. 여력 있으면 두 정거장 옆 기요시코진(오르막 참배길)'],
+        ['12:30','food','고베규 런치','산노미야 · 8명 개별실 예약'],
+        ['14:00','temple','이쿠타 신사','식당 근처 시내 평지'],
+        ['14:30','shop','센터가이 → 모토마치 → 다이마루','지붕 있는 평지, 양과자·드러그스토어'],
+        ['18:00','food','난킨마치 저녁','춘절 행사와 겹칠 수 있음'],
+        ['19:30','move','셔틀로 포트피아','산노미야에서 약 20분']]],
+      ['2/8 월','아리마',[
+        ['09:45','move','체크아웃 · 짐 맡기기','체크아웃 11:00, 짐은 호텔 보관'],
+        ['10:00','kid','고베 동물왕국','포트피아에서 가까움, 점심도 여기서'],
+        ['13:30','move','짐 찾아 아리마로','차량 약 1시간 ⚠️'],
+        ['15:00','onsen','아리마 체크인',''],
+        ['15:30','temple','온센지·다이코노유도노칸','온센지 16:30경까지 ⚠️ · 오르막이라 어르신은 차로 위쪽까지'],
+        ['16:30','food','탄산센베이·고로케','정육점은 월요일 영업'],
+        ['17:00','onsen','외부 온천 또는 숙소 대욕장','킨노유는 다음날 휴관이라 오늘 가야 함'],
+        ['18:30','food','숙소 저녁','']]],
+      ['2/9 화','',[
+        ['07:00','onsen','숙소 대욕장','06:00~10:00'],
+        ['10:00','move','체크아웃 → 산노미야','대형택시·전용차 예약 필수, 짐은 차에'],
+        ['11:00','shop','다이마루·센터가이 마지막 쇼핑·점심','짐이 많으면 산노미야 생략하고 공항 직행(약 1시간 10분)'],
+        ['13:00','move','포트라이너로 공항','약 18분'],
+        ['13:30','move','공항 도착','출발 2시간 전'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
+  onsen:{name:'온천 먼저', short:'아리마 1박 → 포트피아 2박', arimaNights:1, order:'3', bathDay:'we',
+    desc:'도착일에 바로 온천에서 쉬고, 일요일 오후부터 시내. 월요일을 사찰·고베규·하버랜드 날로 쓰고 귀국일 오전 동물왕국 후 공항.',
+    segs:['air-arima','port-arima','city','nakaCity','city','air-port'], att:['bath','anpan','tower','zoo'], beef:true, extra:[],
+    days:[
+      ['2/6 토','아리마',[
+        ['14:45','move','고베공항 도착 ⚠️','입국 후 차량 탑승'],
+        ['16:30','move','아리마 체크인','약 1시간 10분. 짐 많으면 차량 권장'],
+        ['17:00','onsen','외부 온천 또는 숙소 대욕장','토요일·설 연휴라 붐빔'],
+        ['19:00','food','숙소 저녁','']]],
+      ['2/7 일','포트피아',[
+        ['07:00','onsen','숙소 대욕장','06:00~10:00 ⚠️'],
+        ['09:30','move','체크아웃 → 온천가','송영으로 내려감, 짐 보관처 확인 필요'],
+        ['09:45','temple','온센지·다이코노유도노칸','오르막이라 어르신은 차로 위쪽까지'],
+        ['11:00','food','탄산센베이·고로케','온천가 간식으로 점심 대신'],
+        ['12:00','move','아리마 → 포트피아','차량 약 1시간 ⚠️, 짐 맡기고 시내로'],
+        ['14:00','temple','이쿠타 신사','시내 평지'],
+        ['14:30','shop','센터가이 → 모토마치 → 다이마루','지붕 있는 평지, 양과자·드러그스토어'],
+        ['18:00','food','난킨마치 저녁','춘절 행사와 겹칠 수 있음'],
+        ['19:30','move','셔틀로 포트피아','산노미야에서 약 20분']]],
+      ['2/8 월','포트피아',[
+        ['09:00','move','산노미야 → 나카야마데라','한큐 환승 2회 약 50분 ⚠️'],
+        ['10:00','temple','나카야마데라','엘리베이터 09:00~16:30, 입장 무료. 여력 있으면 두 정거장 옆 기요시코진(오르막 참배길)'],
+        ['12:30','food','고베규 런치','산노미야 · 8명 개별실 예약, 평일이라 덜 붐빔'],
+        ['14:30','temple','미나토가와 신사','JR 고베역 도보 약 3분'],
+        ['15:00','kid','안판만 뮤지엄 + 우미에 쇼핑','일시 지정 웹 티켓 필수'],
+        ['17:30','kid','메리켄파크·포트타워','엘리베이터 전망층, 야경'],
+        ['18:30','food','하버랜드 저녁',''],
+        ['20:00','move','포트피아 복귀','']]],
+      ['2/9 화','',[
+        ['09:30','move','체크아웃 · 짐 맡기기',''],
+        ['10:00','kid','고베 동물왕국','포트피아에서 가까움'],
+        ['12:30','move','짐 찾아 공항','약 15분'],
+        ['13:30','move','공항 도착','출발 2시간 전'],
+        ['15:30','move','고베공항 출발','']]],
+    ]},
   bro1:{name:'형님 1안', short:'포트피아 2박 → 아리마 1박', arimaNights:1, order:'1',
     desc:'Gemini 정리본 그대로. 요일만 바로잡음.',
     segs:['air-port','city','city','port-arima','air-arima'], att:['tower'], beef:true, extra:['rokko-cable'],
@@ -445,87 +546,14 @@ const PLANS = {
         ['10:00','move','체크아웃 → 공항','약 1시간 10분, 대형택시 예약 권장'],
         ['15:30','move','고베공항 출발','']]],
     ]},
-  bro2:{name:'형님 2안', short:'아리마 2박 → 포트피아 1박', arimaNights:2, order:'2',
-    desc:'숙소 순서만 바꾸고 1안 내용을 날짜에 맞춰 옮김.',
-    segs:['air-arima','port-arima','city','air-port'], att:['tower'], beef:true, extra:['rokko-cable'],
-    days:[
-      ['2/6 토','아리마',[
-        ['14:45','move','고베공항 도착 ⚠️',''],
-        ['16:30','move','아리마 체크인','약 1시간 10분'],
-        ['18:00','food','리조트 온천욕·저녁','']]],
-      ['2/7 일','아리마',[
-        ['10:00','onsen','아리마 온천 마을 산책','킨노유·긴노유'],
-        ['17:00','move','롯코산 야경','⚠️ 정상부 영하·결빙']]],
-      ['2/8 월','포트피아',[
-        ['10:00','move','체크아웃 → 포트피아','짐 맡기고 시내로'],
-        ['12:00','','기타노 이진칸 산책','⚠️ 언덕·계단'],
-        ['18:00','food','산노미야 고베규 저녁',''],
-        ['20:00','','메리켄파크·하버랜드 야경','']]],
-      ['2/9 화','',[
-        ['11:00','move','체크아웃 → 공항','약 15분'],
-        ['15:30','move','고베공항 출발','']]],
-    ]},
-  rec:{name:'추천안', short:'2안 순서 + 사찰·쇼핑·아이', arimaNights:2, order:'2', bathDay:'we',
-    desc:'2안 숙소 순서. 첫날 무리 없이 온천, 둘째 날 사찰, 셋째 날 고베규·쇼핑, 마지막 날 동물왕국 후 공항.',
-    segs:['air-arima','nakayama','port-arima','city','air-port'], att:['bath','zoo'], beef:true, extra:[],
-    days:[
-      ['2/6 토','아리마',[
-        ['14:45','move','고베공항 도착 ⚠️','입국 후 차량 탑승'],
-        ['16:30','move','아리마 체크인','약 1시간 10분. 짐 많으면 차량 권장'],
-        ['17:00','onsen','숙소 대욕장','15:00~23:00'],
-        ['18:30','food','숙소 저녁','']]],
-      ['2/7 일','아리마',[
-        ['09:30','onsen','아리마 온천가 산책','어르신은 송영·택시로 위쪽부터 내려오기'],
-        ['10:00','temple','온센지·다이코노유도노칸','온천가 안 사찰'],
-        ['11:30','food','탄산센베이·고로케','온천가 간식'],
-        ['13:30','temple','나카야마데라','엘리베이터 09:00~16:30'],
-        ['16:30','onsen','외부 온천 또는 숙소 휴식','다이코노유·긴노유 선택']]],
-      ['2/8 월','포트피아',[
-        ['10:00','move','체크아웃 → 산노미야','차량 약 45분, 짐은 호텔로'],
-        ['11:00','temple','이쿠타 신사','시내 평지'],
-        ['12:00','food','고베규 런치','8명 개별실 예약'],
-        ['14:00','shop','센터가이 → 모토마치 → 다이마루','지붕 있는 평지'],
-        ['17:00','food','난킨마치 저녁','길거리 음식·중식'],
-        ['19:00','move','셔틀로 포트피아','산노미야에서 약 20분']]],
-      ['2/9 화','',[
-        ['10:00','kid','고베 동물왕국','포트피아에서 가까움'],
-        ['11:00','move','체크아웃 → 공항','약 15분'],
-        ['13:30','move','공항 도착','출발 2시간 전'],
-        ['15:30','move','고베공항 출발','']]],
-    ]},
-  custom:{name:'직접 조합', short:'시간대별로 직접 고르기', arimaNights:2, order:'2', segs:[], att:[], beef:false, extra:[], desc:'아래 칸에서 숙소 순서와 시간대별 할 일을 고르면 일정과 비용이 바뀜.', days:[]},
-  popular:{name:'인기 동선안', short:'시내 정석 + 롯코 넘어 아리마', arimaNights:1, order:'1', bathDay:'wd',
-    desc:'여행 블로그·고베시 추천 코스에 자주 나오는 「항구 평지 + 롯코산 → 아리마 1박」을 1안 숙소 순서에 맞춘 안. 로프웨이 운휴 시 롯코산은 빼고 직행.',
-    segs:['air-port','city','city','air-arima'], att:['tower','atoa','bath','zoo'], beef:true, extra:['rokko'],
-    days:[
-      ['2/6 토','포트피아',[
-        ['14:45','move','고베공항 도착 ⚠️',''],
-        ['15:30','move','포트피아 체크인',''],
-        ['17:00','','메리켄파크·포트타워','엘리베이터 전망층'],
-        ['18:30','food','하버랜드 모자이크 저녁·야경','']]],
-      ['2/7 일','포트피아',[
-        ['10:00','temple','이쿠타 신사',''],
-        ['11:00','shop','산노미야·모토마치 쇼핑',''],
-        ['12:00','food','고베규 런치',''],
-        ['14:00','food','난킨마치',''],
-        ['16:00','kid','아토아 수족관','메리켄파크']]],
-      ['2/8 월','아리마',[
-        ['10:00','kid','고베 동물왕국',''],
-        ['13:00','move','롯코 케이블 → 롯코산 → 로프웨이 → 아리마','⚠️ 정상부 결빙·로프웨이 점검 확인'],
-        ['16:00','onsen','아리마 온천 마을·외부 온천',''],
-        ['18:30','food','숙소 저녁','']]],
-      ['2/9 화','',[
-        ['10:00','move','체크아웃 → 공항','약 1시간 10분, 킨노유 휴관일'],
-        ['15:30','move','고베공항 출발','']]],
-    ]},
+  custom:{name:'직접 조합', short:'시간대별로 직접 고르기', arimaNights:1, order:'1', segs:[], att:[], beef:false, extra:[], desc:'아래 칸에서 시간대별 할 일을 고르면 일정과 비용이 바뀜.', days:[]},
 };
 
 // 평가 점수(5점) — 정성 판단
 const SCORE = {
-  bro1:{어르신:2,사찰:1,쇼핑:2,귀국여유:2},
-  bro2:{어르신:3,사찰:1,쇼핑:2,귀국여유:5},
-  rec:{어르신:4,사찰:5,쇼핑:4,귀국여유:5},
-  popular:{어르신:3,사찰:2,쇼핑:4,귀국여유:2},
+  fin:{어르신:4,사찰:4,쇼핑:5,귀국여유:3,비용:4},
+  onsen:{어르신:4,사찰:4,쇼핑:5,귀국여유:5,비용:3},
+  bro1:{어르신:2,사찰:1,쇼핑:2,귀국여유:2,비용:4},
   custom:null,
 };
 
@@ -534,10 +562,10 @@ const OPTS = {
   beef:[['ishida','Ishida. 런치'],['moriya','모리야 런치'],['dept','백화점 식당가']],
   arimaDinner:[['sep','별도 결제 ⚠️'],['incl','석식 포함 플랜']],
   bath:[['taiko','다이코노유'],['ginno','긴노유'],['none','숙소 대욕장만']],
-  cOrder:[['2','2안 순서(아리마 먼저)'],['1','1안 순서(포트피아 먼저)']],
+  cOrder:[['1','시내 먼저'],['3','온천 먼저']],
   rooms:[['split2','2실 (남성 3 / 여성·아이 5)'],['fam3','3실 (가족별)'],['villa','아리마 독채 1채']],
 };
-const state = {rooms:'split2', prods:[], cOrder:'2', cSel:{}, day:-1, plan:'rec', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
+const state = {rooms:'split2', prods:[], cOrder:'1', cSel:{}, day:-1, plan:'fin', move:'pub', beef:'ishida', arimaDinner:'sep', bath:'taiko'};
 
 const FX = 846.17; // 원/100엔, 2026-10-07 11:00 기준환율 고정
 const won = y => y*FX/100;
@@ -545,11 +573,11 @@ const per = p => p.a*PAX.a + p.s*PAX.s + p.c*PAX.c;
 const fmt = n => Math.round(n).toLocaleString('ko-KR');
 
 function customPlan(){
-  const o = state.cOrder; const pl = PLANS.custom; pl.order=o; pl.arimaNights = o==='2'?2:1;
-  const stayOf = i => i===3?'':(o==='2'?(i<2?'아리마':'포트피아'):(i<2?'포트피아':'아리마'));
-  pl.days = SLOTS.map(([d,sl],i)=>[d, stayOf(i), sl.map(([t,lab,def])=>{
+  const o = state.cOrder==='3'?'3':'1'; const pl = PLANS.custom; pl.order=o; pl.arimaNights = 1;
+  const stayOf = i => i===3?'':(o==='3'?(i<1?'아리마':'포트피아'):(i<2?'포트피아':'아리마'));
+  pl.days = SLOTS_BY[o].map(([d,sl],i)=>[d, stayOf(i), sl.map(([t,lab,def])=>{
     const k = state.cSel[d+lab]||def; const b=BLOCKS[k]; return [t, b.tag||'', b.n, lab+' · 직접 선택', k];})]);
-  pl.segs = o==='2' ? ['air-arima','port-arima','air-port'] : ['air-port','port-arima','air-arima'];
+  pl.segs = o==='3' ? ['air-arima','port-arima','air-port'] : ['air-port','port-arima','air-arima'];
   return pl;
 }
 function calc(){
@@ -559,7 +587,7 @@ function calc(){
   if(state.move==='rent'){
     const r = RENT.perDay*RENT.days + RENT.extraPerDay*RENT.days;
     rows.push(['렌터카 8인승 이상 3일 + 연료·통행료','⚠️ 견적 전 추정', r]);
-    const pn = pl.order==='1'?2:1; rows.push(['포트피아 주차 '+pn+'일','', RENT.portParking*pn]);
+    const pn = pl.order==='2'?1:2; rows.push(['포트피아 주차 '+pn+'일','', RENT.portParking*pn]);
   } else {
     for(const k of pl.segs){
       const s = SEG[k];
@@ -616,19 +644,19 @@ function render(){
   document.getElementById('stSub').textContent = PLANS[state.plan].name+' · 1인 약 '+fmt(krw/N/10000)+'만 원';
   let h = '<tr><th>항목</th><th>비고</th><th>원 (엔)</th></tr>';
   for(const r of rows) h += r[3]!=null ? `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(r[3])}원</td></tr>` : `<tr><td>${r[0]}</td><td class="flag">${r[1]}</td><td>${fmt(won(r[2]))}원<br><span class="flag" style="color:var(--sub)">${fmt(r[2])}엔</span></td></tr>`;
-  h += `<tr><td>숙소 3박 · ${ROOMS[state.rooms].label} (${pl0.order==='1'?'포트피아 2박+아리마 1박':'아리마 2박+포트피아 1박'})</td><td class="flag">${hotelSrc}</td><td>${fmt(hotel)}원</td></tr>`;
+  h += `<tr><td>숙소 3박 · ${ROOMS[state.rooms].label} (${ORDER_TXT[pl0.order]})</td><td class="flag">${hotelSrc}</td><td>${fmt(hotel)}원</td></tr>`;
   document.getElementById('bd').innerHTML = h;
   const cb = document.getElementById('customBox'); cb.style.display = state.plan==='custom'?'block':'none';
   if(state.plan==='custom'){
     const opts = Object.entries(BLOCKS).map(([k,b])=>[k,b.n]);
-    document.getElementById('slotpicks').innerHTML = SLOTS.map(([d,sl])=>sl.map(([t,lab,def])=>{const cur=state.cSel[d+lab]||def;
+    document.getElementById('slotpicks').innerHTML = SLOTS_BY[state.cOrder==='3'?'3':'1'].map(([d,sl])=>sl.map(([t,lab,def])=>{const cur=state.cSel[d+lab]||def;
       return `<div class="slotpick"><span>${d.split(' ')[0]} ${lab}</span><select data-key="${d+lab}">${opts.map(([k,n])=>`<option value="${k}" ${k===cur?'selected':''}>${n}</option>`).join('')}</select></div>`;}).join('')).join('');
   }
   document.getElementById('prodlist').innerHTML = PRODS.map(p=>`<div class="prod"><div class="nm">${p.nm}</div><div class="meta">${p.meta}</div><div class="meta">${p.note}</div>
     <div class="row"><b>${fmt(p.krw)}원~</b><label><input type="checkbox" data-prod="${p.id}" ${state.prods.includes(p.id)?'checked':''}>비용에 포함</label></div>
     <a href="${p.url}?start_date=2027-02-06&end_date=2027-02-09&selected_currency=KRW" target="_blank" rel="noopener">Booking.com에서 보기 ↗</a></div>`).join('');
   // 점수
-  const sc = SCORE[state.plan] || {귀국여유: state.cOrder==='2'?5:2};
+  const sc = SCORE[state.plan] || (state.cOrder==='3'?{귀국여유:5,비용:3}:{귀국여유:3,비용:4});
   document.getElementById('score').innerHTML = Object.entries(sc).map(([k,v])=>`<div><small>${k}</small><strong>${'●'.repeat(v)}${'○'.repeat(5-v)}</strong></div>`).join('');
   // 일정
   const pl = PLANS[state.plan];
@@ -643,16 +671,31 @@ function render(){
     <a class="bk" href="${link}" target="_blank" rel="noopener">Booking.com에서 이 날짜로 보기 ↗</a>
     <div class="flag" style="color:var(--sub)">방 ${no}개·성인 6명으로 열림. 아이 2명과 방별 인원은 Booking.com 화면에서 직접 지정. 결제는 각자 진행</div></div>`;}).join('');
   const bf = n => won(per(VILLA_BREAKFAST)*n);
-  document.getElementById('roomcmp').innerHTML = '<tr><th>숙소비 3박 합계</th><th>1안 순서<br><span class="flag">포트피아 2박+아리마 1박</span></th><th>2안 순서<br><span class="flag">아리마 2박+포트피아 1박</span></th></tr>' +
-    Object.entries(ROOMS).map(([k,R])=>`<tr${k===state.rooms?' style="font-weight:700"':''}><td>${R.label}</td><td>${fmt(hotelBy(k,'1')/10000)}만 원${R.villa?`<br><span class="flag">+ 조식 약 ${fmt(bf(1)/10000)}만 원</span>`:''}</td><td>${fmt(hotelBy(k,'2')/10000)}만 원${R.villa?`<br><span class="flag">+ 조식 약 ${fmt(bf(2)/10000)}만 원</span>`:''}</td></tr>`).join('') +
-    '<tr><td colspan="3" class="flag">프린세스 아리마는 조식 포함. 독채는 식사가 없어 조식(추정)·저녁이 별도. 포트피아는 세 경우 모두 조식 미포함</td></tr>';
+  document.getElementById('roomcmp').innerHTML = '<tr><th>숙소비 3박 합계</th><th>시내 먼저<br><span class="flag">포트피아 2박+아리마 1박</span></th><th>온천 먼저<br><span class="flag">아리마 1박+포트피아 2박</span></th></tr>' +
+    Object.entries(ROOMS).map(([k,R])=>`<tr${k===state.rooms?' style="font-weight:700"':''}><td>${R.label}</td><td>${fmt(hotelBy(k,'1')/10000)}만 원${R.villa?`<br><span class="flag">+ 조식 약 ${fmt(bf(1)/10000)}만 원</span>`:''}</td><td>${fmt(hotelBy(k,'3')/10000)}만 원${R.villa?`<br><span class="flag">+ 조식 약 ${fmt(bf(1)/10000)}만 원</span>`:''}</td></tr>`).join('') +
+    '<tr><td colspan="3" class="flag">시내 먼저는 2026-10-07, 온천 먼저는 2026-10-10 Booking.com 조회(같은 인원·방 조건). 프린세스 아리마는 조식 포함. 독채는 식사가 없어 조식(추정)·저녁이 별도. 포트피아는 세 경우 모두 조식 미포함</td></tr>';
+  const ordKey = state.plan==='onsen' || (state.plan==='custom' && state.cOrder==='3') ? 'onsen' : (state.plan==='fin' || state.plan==='custom' ? 'fin' : '');
+  document.getElementById('orderpick').innerHTML = [['fin','시내 먼저','포트피아 2박 → 아리마 1박 · 지금 예약'],['onsen','온천 먼저','아리마 1박 → 포트피아 2박 · 날짜 변경 필요']]
+    .map(([k,n,d])=>`<button class="planbtn" data-k="${k}" aria-pressed="${state.plan===k}"><b>${n}</b><span>${d}</span></button>`).join('');
+  const h1=hotelBy(state.rooms,'1'), h3=hotelBy(state.rooms,'3');
+  const CMP = [
+    ['숙소비 3박<br><span class="flag">'+ROOMS[state.rooms].label+'</span>', '약 '+fmt(h1/10000)+'만 원', '약 '+fmt(h3/10000)+'만 원'+(h3-h1>5000?' <span class="flag">(+'+fmt((h3-h1)/10000)+'만)</span>':'')],
+    ['예약', '<span class="mark o">지금 예약 그대로</span>', '<span class="mark t">두 예약 모두 날짜 변경</span><br><span class="flag">아리마 2/6~7 · 포트피아 2/7~9</span>'],
+    ['도착일', '공항→포트피아 15분. 저녁에 메리켄파크·하버랜드', '공항→아리마 약 1시간 10분. 도착 후 바로 온천에서 쉼'],
+    ['아리마 밤', '<span class="mark o">월요일 평일</span> · 덜 붐비고 온천 입장료 평일 요금', '<span class="mark t">토요일·설 연휴</span> · 붐비고 주말 요금'],
+    ['시내 사찰·쇼핑 날', '일요일 (나카야마데라 → 산노미야)', '월요일 (나카야마데라 → 산노미야·하버랜드). 고베규 식당이 평일이라 덜 붐빔'],
+    ['킨노유', '2/9 휴관이라 월요일에 가야 함', '토·일에 가므로 영향 없음'],
+    ['귀국일', '<span class="mark t">아리마→공항 약 1시간 10분</span> · 대형택시·전용차 예약 필수. 산노미야 들러 마지막 쇼핑 가능', '<span class="mark o">공항까지 15분</span> · 오전 동물왕국 후 여유 있게 출발'],
+    ['여행 마무리', '온천에서 쉬고 귀국 → 어르신이 편함', '시내 구경으로 끝남'],
+  ];
+  document.getElementById('ordercmp').innerHTML = '<tr><th style="width:22%">항목</th><th>시내 먼저</th><th>온천 먼저</th></tr>'+CMP.map(r=>`<tr><td>${r[0]}</td><td${ordKey==='fin'?' style="background:var(--accent-soft)"':''}>${r[1]}</td><td${ordKey==='onsen'?' style="background:var(--accent-soft)"':''}>${r[2]}</td></tr>`).join('');
   const tabs = ['전체'].concat(pl.days.map(d=>d[0]));
   document.getElementById('daytabs').innerHTML = tabs.map((t,i)=>`<button data-i="${i-1}" aria-pressed="${state.day===i-1}">${t}</button>`).join('');
   document.getElementById('days').innerHTML = pl.days.filter((_,i)=>state.day<0||state.day===i).map(([d,stay,items])=>`
     <div class="day"><div class="dayhead"><b>${d}</b><span>${stay?'숙박 · '+(stay==='아리마'?(ROOMS[state.rooms].villa?VILLA.nm:HOTEL_INFO.arima.nm):HOTEL_INFO.port.nm):'귀국일'}</span></div>
     ${items.map(([t,tag,ti,nt])=>{
       let title=ti, note=nt;
-      if(state.plan==='rec' && ti.startsWith('외부 온천')){ title = state.bath==='none'?'숙소 휴식·대욕장':(state.bath==='taiko'?'다이코노유':'긴노유'); }
+      if((state.plan==='fin'||state.plan==='onsen') && ti.startsWith('외부 온천')){ title = state.bath==='none'?'숙소 휴식·대욕장':(state.bath==='taiko'?'다이코노유':'긴노유'); }
       if(ti.includes('고베규')){ note = (nt?nt+' · ':'')+BEEF[state.beef].label; }
       return `<div class="slot"><div class="tm">${t}</div><div>${tag?`<span class="tag ${tag}">${TAGN[tag]}</span>`:''}<span class="ti">${title}</span>${note?`<div class="nt">${note}</div>`:''}</div></div>`;}).join('')}
     </div>`).join('');
@@ -661,9 +704,11 @@ function render(){
 
 function init(){
   try{ Object.assign(state, JSON.parse(localStorage.getItem('trip-state')||'{}')); }catch(e){}
+  if(!PLANS[state.plan]) state.plan='fin'; if(!['1','3'].includes(state.cOrder)) state.cOrder='1';
   const pp = document.getElementById('planpick');
   pp.innerHTML = Object.entries(PLANS).map(([k,p])=>`<button class="planbtn" data-k="${k}"><b>${p.name}</b><span>${p.short}</span></button>`).join('');
   pp.addEventListener('click',e=>{const b=e.target.closest('.planbtn'); if(b){state.plan=b.dataset.k; render();}});
+  document.getElementById('orderpick').addEventListener('click',e=>{const b=e.target.closest('.planbtn'); if(b){state.plan=b.dataset.k; state.day=-1; render(); document.getElementById('planTitle').scrollIntoView({behavior:'smooth',block:'start'});}});
   document.getElementById('daytabs').addEventListener('click',e=>{const b=e.target.closest('button'); if(b){state.day=+b.dataset.i; render();}});
   document.querySelectorAll('.seg').forEach(g=>{
     g.innerHTML = OPTS[g.dataset.opt].map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');
@@ -671,7 +716,7 @@ function init(){
   });
   document.getElementById('hotel').addEventListener('input',render);
   document.getElementById('ryokanlist').innerHTML = RYOKAN.map(r=>`<div class="prod"><div class="nm">${r.nm}</div><div class="meta">${r.meta}</div>
-    ${[['2/6~8 · 2박 합계','k68','2027-02-06','2027-02-08'],['2/8~9 · 1박','k89','2027-02-08','2027-02-09']].map(([lb,k,ci,co])=>`<div class="row"><span>${lb} · ${r.villa?'방 1개(한 채)':'방 3개'}</span><b>${fmt(r[k])}원</b></div>
+    ${[['2/8~9 · 1박','k89','2027-02-08','2027-02-09']].map(([lb,k,ci,co])=>`<div class="row"><span>${lb} · ${r.villa?'방 1개(한 채)':'방 3개'}</span><b>${fmt(r[k])}원</b></div>
     <a href="${r.url}?checkin=${ci}&checkout=${co}&no_rooms=${r.villa?1:3}&group_adults=6&selected_currency=KRW" target="_blank" rel="noopener">${lb.split(' ')[0]} Booking.com에서 보기 ↗</a>`).join('')}</div>`).join('');
   document.getElementById('prodlist').addEventListener('change',e=>{const id=e.target.dataset.prod; if(!id) return; state.prods = e.target.checked ? [...new Set([...state.prods,id])] : state.prods.filter(x=>x!==id); render();});
   document.getElementById('slotpicks').addEventListener('change',e=>{const k=e.target.dataset.key; if(k){state.cSel[k]=e.target.value; render();}});

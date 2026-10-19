@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>광세기 플레이샵 🎒</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#FFF8F1;--card:#FFFFFF;--ink:#2B2A33;--ink2:#5E5B6B;--muted:#9A96A6;--line:#F0E6DA;
+  --peach:#FF9F7A;--peach-soft:#FFE5D9;--mint:#5CC9A7;--mint-soft:#DDF5EC;--sky:#6AA8FF;--sky-soft:#E3EEFF;
+  --lemon:#FFD15C;--lemon-soft:#FFF4D1;--grape:#A88BFF;--grape-soft:#EEE7FF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;font-size:15px;line-height:1.55;word-break:keep-all}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 60px}
+header{padding:36px 0 18px;text-align:center}
+header .badge{display:inline-block;background:var(--lemon-soft);color:#9A6B00;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700}
+header h1{font-size:30px;margin:12px 0 6px;letter-spacing:-.5px}
+header p{color:var(--ink2);margin:0}
+.timeline{display:flex;gap:8px;overflow-x:auto;padding:18px 2px 6px;scroll-snap-type:x mandatory}
+.step{flex:0 0 auto;scroll-snap-align:start;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 14px;min-width:132px;text-align:center}
+.step .em{font-size:24px}.step .t{font-size:12px;color:var(--muted)}.step .n{font-weight:700;font-size:14px}
+.step.fixed{background:var(--mint-soft);border-color:#BFE9DA}
+.step.vote{background:var(--peach-soft);border-color:#FFD0BD}
+.step .pick{font-size:12px;color:var(--ink2);margin-top:2px}
+.arrow{flex:0 0 auto;align-self:center;color:var(--muted)}
+.me{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border-radius:18px;padding:14px 16px;margin:16px 0;border:2px dashed var(--line)}
+.me input{flex:1 1 180px;font:inherit;padding:9px 12px;border:2px solid var(--line);border-radius:12px;outline:none}
+.me input:focus{border-color:var(--peach)}
+.me .hint{width:100%;font-size:12.5px;color:var(--muted)}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:9px 16px;cursor:pointer;background:var(--peach);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink2);border:2px solid var(--line)}
+.notice{background:var(--lemon-soft);border-radius:14px;padding:10px 14px;font-size:13px;color:#7A5A00;margin:10px 0}
+section.stage{margin:28px 0}
+.sh{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.sh h2{margin:0;font-size:21px}.sh .time{color:var(--muted);font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cand{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px;transition:transform .12s,border-color .12s}
+.cand:hover{transform:translateY(-2px)}
+.cand.mine{border-color:var(--peach);box-shadow:0 6px 18px rgba(255,159,122,.18)}
+.cand .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.cand .nm{font-weight:800;font-size:16.5px}
+.cand .cat{font-size:12px;color:var(--ink2);background:var(--sky-soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.cand .rate{font-size:13px;color:var(--ink2)}.cand .rate b{color:#E08A00}
+.cand .rv{font-size:13.5px;color:var(--ink2);background:#FBF7F2;border-radius:12px;padding:8px 10px}
+.cand .meta{font-size:12.5px;color:var(--muted)}
+.cand .row{display:flex;gap:8px;align-items:center;margin-top:auto;padding-top:4px}
+.cand .row a{font-size:12.5px;color:var(--sky);text-decoration:none;font-weight:600}
+.vote{margin-left:auto;font:inherit;font-weight:800;border:0;border-radius:12px;padding:8px 14px;cursor:pointer;background:var(--peach-soft);color:#C4542A}
+.cand.mine .vote{background:var(--peach);color:#fff}
+.bar{height:10px;background:#F5EEE6;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--peach),var(--lemon));border-radius:999px;transition:width .3s}
+.who{font-size:12px;color:var(--muted);min-height:16px}
+.empty{background:var(--card);border:2px dashed var(--line);border-radius:18px;padding:26px;text-align:center;color:var(--muted)}
+.result{background:var(--card);border-radius:20px;padding:18px;border:2px solid var(--line)}
+.result h2{margin:0 0 10px;font-size:20px}
+.res-row{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.res-row:last-child{border-bottom:0}
+.res-row .lb{font-weight:700}.res-row .cnt{color:var(--muted);font-size:13px}
+.maptools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{font:inherit;font-size:13px;font-weight:700;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink2)}
+.chip.on{background:var(--grape-soft);border-color:var(--grape);color:#5B3FD6}
+#map{width:100%;height:380px;border-radius:20px;overflow:hidden;border:2px solid var(--line);background:#EFEAF8}
+.nomap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink2);gap:6px;padding:20px;text-align:center}
+.legs{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.legs li{background:var(--card);border-radius:14px;padding:9px 12px;border:2px solid var(--line);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.legs .no{background:var(--grape);color:#fff;border-radius:999px;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.legs a{margin-left:auto;font-size:12.5px;color:var(--sky);font-weight:700;text-decoration:none}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:30px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media (max-width:520px){header h1{font-size:25px}#map{height:300px}.res-row{grid-template-columns:70px 1fr}.res-row .cnt{grid-column:2}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">10/21(수) · 광세기 플레이샵</span>
+    <h1>오늘 뭐 먹고 뭐 하지? 🎒</h1>
+    <p>남산 트래킹은 확정! 그다음은 우리가 같이 골라요 🙌</p>
+  </header>
+
+  <div class="timeline" id="timeline"></div>
+
+  <div class="me">
+    <span>🙋 내 이름</span>
+    <input id="myName" maxlength="12" placeholder="별명이나 이름 (예: 오시리스)">
+    <button class="btn" id="saveName">저장</button>
+    <div class="hint">단계마다 한 곳씩 고를 수 있어요. 마음이 바뀌면 다른 곳을 누르면 바뀌고, 같은 곳을 한 번 더 누르면 취소돼요.</div>
+  </div>
+  <div class="notice" id="modeNote" hidden></div>
+
+  <div id="stages"></div>
+
+  <section class="stage">
+    <div class="result" id="result"></div>
+  </section>
+
+  <section class="stage">
+    <div class="sh"><h2>🗺️ 이동 동선</h2><span class="time">김유신장군상에서 출발</span></div>
+    <div class="maptools" id="routeMode"></div>
+    <div id="map"></div>
+    <ul class="legs" id="legs"></ul>
+  </section>
+
+  <footer>장소 정보는 카카오맵 기준 · 평점·리뷰는 정리 시점 값이라 바뀔 수 있어요</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== 설정 ===== */
+const CONFIG={
+  kakaoJsKey:'',   // 카카오 개발자 JavaScript 키 (도메인 lsh-osiris76.github.io 등록 필요)
+  voteApi:''       // 투표 저장용 Google Apps Script 웹앱 URL (apps-script.gs 참고)
+};
+const START={name:'김유신장군상',sub:'11:00 집결 · 남산 트래킹',x:126.978171021515,y:37.5557941126889,url:'https://place.map.kakao.com/8237574'};
+
+/* ===== 후보 (리스트 받으면 채움) =====
+ 후보 형식: {id:'l1', name:'', cat:'한식', menu:'대표 메뉴', rating:4.3, reviews:120, review:'한 줄 리뷰', addr:'', x:경도, y:위도, url:'카카오맵 장소 링크', note:''} */
+const STAGES=[
+  {id:'lunch', emoji:'🍜', title:'점심', time:'트래킹 후', cands:[]},
+  {id:'act',   emoji:'🎳', title:'오후 액티비티', time:'점심 후', cands:[]},
+  {id:'dinner',emoji:'🍻', title:'저녁', time:'마무리', cands:[]}
+];
+
+/* ===== 투표 저장소 ===== */
+const LS='playshop-2026-votes', LSN='playshop-2026-name';
+const store={
+  async load(){
+    if(CONFIG.voteApi){const r=await fetch(CONFIG.voteApi+'?action=get&t='+Date.now());return (await r.json()).votes||{}}
+    try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return {}}
+  },
+  async vote(stage,voter,cand){
+    if(CONFIG.voteApi){const q=new URLSearchParams({action:'vote',stage,voter,cand});const r=await fetch(CONFIG.voteApi+'?'+q);return (await r.json()).votes||{}}
+    const v=await store.load();v[stage]=v[stage]||{};if(cand)v[stage][voter]=cand;else delete v[stage][voter];
+    try{localStorage.setItem(LS,JSON.stringify(v))}catch(e){}return v;
+  }
+};
+
+/* ===== 상태 ===== */
+let VOTES={}, ME='', ROUTE='top';
+try{ME=localStorage.getItem(LSN)||''}catch(e){}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),1600)};
+const tally=st=>{const c={};Object.values(VOTES[st.id]||{}).forEach(id=>c[id]=(c[id]||0)+1);return c};
+const votersOf=(st,id)=>Object.entries(VOTES[st.id]||{}).filter(([,c])=>c===id).map(([n])=>n);
+const leader=st=>{const c=tally(st);let best=null;st.cands.forEach(x=>{if((c[x.id]||0)>0&&(!best||c[x.id]>c[best.id]))best=x});return best};
+const myPick=st=>{const id=(VOTES[st.id]||{})[ME];return st.cands.find(x=>x.id===id)};
+
+$('#myName').value=ME;
+$('#saveName').onclick=()=>{const v=$('#myName').value.trim();if(!v)return toast('이름을 적어주세요 🙂');ME=v;try{localStorage.setItem(LSN,v)}catch(e){}toast(`반가워요, ${v}님! 👋`);render()};
+if(!CONFIG.voteApi){$('#modeNote').hidden=false;$('#modeNote').textContent='🛠 지금은 미리보기 모드라 투표가 이 기기에만 저장돼요. 투표 저장소를 연결하면 모두의 투표가 모여요.'}
+
+function render(){
+  // timeline
+  const tl=[`<div class="step fixed"><div class="em">⛰️</div><div class="t">11:00</div><div class="n">남산 트래킹</div><div class="pick">김유신장군상 집결</div></div>`];
+  STAGES.forEach(st=>{const l=leader(st);tl.push(`<div class="arrow">→</div><div class="step vote"><div class="em">${st.emoji}</div><div class="t">${st.time}</div><div class="n">${st.title}</div><div class="pick">${l?'현재 1위 '+esc(l.name):'투표 중'}</div></div>`)});
+  $('#timeline').innerHTML=tl.join('');
+  // stages
+  $('#stages').innerHTML=STAGES.map(st=>{
+    const c=tally(st),tot=Object.values(c).reduce((a,b)=>a+b,0),mine=myPick(st);
+    const body=st.cands.length?`<div class="cards">${st.cands.map(x=>{const n=c[x.id]||0,w=tot?n/tot*100:0,vs=votersOf(st,x.id);
+      return `<div class="cand ${mine&&mine.id===x.id?'mine':''}">
+        <div class="top"><div class="nm">${esc(x.name)}</div>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:''}</div>
+        ${x.rating?`<div class="rate">⭐ <b>${x.rating}</b>${x.reviews?` · 리뷰 ${x.reviews}`:''}${x.menu?` · ${esc(x.menu)}`:''}</div>`:x.menu?`<div class="rate">${esc(x.menu)}</div>`:''}
+        ${x.review?`<div class="rv">💬 ${esc(x.review)}</div>`:''}
+        ${x.addr||x.note?`<div class="meta">${esc(x.addr||'')}${x.addr&&x.note?' · ':''}${esc(x.note||'')}</div>`:''}
+        <div class="bar"><i style="width:${w}%"></i></div>
+        <div class="who">${n?`${n}표 · ${vs.map(esc).join(', ')}`:'아직 0표'}</div>
+        <div class="row">${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">카카오맵에서 보기 ↗</a>`:''}<button class="vote" data-s="${st.id}" data-c="${x.id}">${mine&&mine.id===x.id?'✔ 내 픽':'여기 갈래요'}</button></div>
+      </div>`}).join('')}</div>`:`<div class="empty">후보를 준비하고 있어요 👀</div>`;
+    return `<section class="stage"><div class="sh"><h2>${st.emoji} ${st.title}</h2><span class="time">${st.time} · ${tot}명 참여</span></div>${body}</section>`;
+  }).join('');
+  document.querySelectorAll('.vote').forEach(b=>b.onclick=async()=>{
+    if(!ME){$('#myName').focus();return toast('먼저 이름을 저장해 주세요 🙋')}
+    const st=STAGES.find(s=>s.id===b.dataset.s),cur=(VOTES[st.id]||{})[ME],next=cur===b.dataset.c?'':b.dataset.c;
+    b.disabled=true;try{VOTES=await store.vote(st.id,ME,next);toast(next?'투표 완료! 🗳️':'투표를 취소했어요')}catch(e){toast('저장에 실패했어요. 다시 눌러주세요')}render();
+  });
+  // result
+  $('#result').innerHTML=`<h2>🏆 지금까지 결과</h2>`+STAGES.map(st=>{const l=leader(st),c=tally(st);
+    const ties=l?st.cands.filter(x=>(c[x.id]||0)===c[l.id]):[];
+    return `<div class="res-row"><span class="lb">${st.emoji} ${st.title}</span><span>${l?ties.map(t=>esc(t.name)).join(' · ')+(ties.length>1?' (동점)':''):'<span style="color:var(--muted)">아직 투표 전</span>'}</span><span class="cnt">${l?c[l.id]+'표':''}</span></div>`}).join('');
+  // route
+  $('#routeMode').innerHTML=[['top','🏆 1위 동선'],['mine','🙋 내 픽 동선']].map(([k,l])=>`<button class="chip ${ROUTE===k?'on':''}" data-r="${k}">${l}</button>`).join('');
+  document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ROUTE=b.dataset.r;render()});
+  drawRoute();
+}
+
+/* ===== 지도 ===== */
+let MAP=null,OVL=[];
+const routePts=()=>[START,...STAGES.map(st=>{const p=ROUTE==='mine'?myPick(st):leader(st);return p&&p.x?{...p,stage:st}:null}).filter(Boolean)];
+const kmLink=(a,b)=>`https://map.kakao.com/link/from/${encodeURIComponent(a.name)},${a.y},${a.x}/to/${encodeURIComponent(b.name)},${b.y},${b.x}`;
+function drawRoute(){
+  const pts=routePts();
+  $('#legs').innerHTML=pts.length>1?pts.slice(1).map((p,i)=>`<li><span class="no">${i+1}</span>${esc(pts[i].name)} → <b>${esc(p.name)}</b> <span style="color:var(--muted);font-size:12.5px">${p.stage.emoji} ${p.stage.title}</span><a href="${kmLink(pts[i],p)}" target="_blank" rel="noopener">길찾기 ↗</a></li>`).join(''):`<li style="color:var(--muted)">${ROUTE==='mine'?'내가 고른 곳이 생기면':'투표가 모이면'} 동선이 그려져요</li>`;
+  if(!window.kakao||!kakao.maps){
+    $('#map').innerHTML=`<div class="nomap"><div style="font-size:28px">🗺️</div><b>카카오맵 연결 준비 중</b><div style="font-size:13px">아래 길찾기 링크로 카카오맵에서 바로 볼 수 있어요</div></div>`;return;
+  }
+  if(!MAP)MAP=new kakao.maps.Map($('#map'),{center:new kakao.maps.LatLng(START.y,START.x),level:6});
+  OVL.forEach(o=>o.setMap(null));OVL=[];
+  const bounds=new kakao.maps.LatLngBounds(),path=[];
+  pts.forEach((p,i)=>{const ll=new kakao.maps.LatLng(p.y,p.x);bounds.extend(ll);path.push(ll);
+    const lab=i===0?'⛰️ 출발':`${p.stage.emoji} ${p.name}`;
+    OVL.push(new kakao.maps.CustomOverlay({map:MAP,position:ll,yAnchor:1.3,content:`<div style="background:#fff;border:2px solid ${i?'#FF9F7A':'#5CC9A7'};border-radius:999px;padding:4px 10px;font:700 12.5px Pretendard,sans-serif;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.12)">${esc(lab)}</div>`}));
+    OVL.push(new kakao.maps.Marker({map:MAP,position:ll}));
+  });
+  if(path.length>1)OVL.push(new kakao.maps.Polyline({map:MAP,path,strokeWeight:5,strokeColor:'#A88BFF',strokeOpacity:.85,strokeStyle:'shortdash'}));
+  if(path.length>1)MAP.setBounds(bounds,60,60,60,60);else MAP.setCenter(path[0]);
+}
+
+/* ===== 시작 ===== */
+async function boot(){
+  try{VOTES=await store.load()}catch(e){VOTES={};toast('투표 불러오기에 실패했어요')}
+  render();
+  if(CONFIG.voteApi)setInterval(async()=>{try{VOTES=await store.load();render()}catch(e){}},15000);
+}
+if(CONFIG.kakaoJsKey){const s=document.createElement('script');s.src=`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${CONFIG.kakaoJsKey}&autoload=false`;s.onload=()=>kakao.maps.load(boot);s.onerror=boot;document.head.appendChild(s)}else boot();
+</script>
+</body>
+</html>

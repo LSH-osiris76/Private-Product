@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>광세기 플레이샵 🎒</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
 :root{
@@ -48,6 +50,7 @@ section.stage{margin:28px 0}
 .cand .ph{width:100%;height:120px;object-fit:cover;border-radius:12px;background:#F3ECE4;margin:-2px 0 2px;display:block}
 .cand .note{font-size:12.5px;color:#7A5A00;background:var(--lemon-soft);border-radius:10px;padding:4px 9px;align-self:flex-start}
 .cand .menu{font-size:13px;color:var(--ink2)}
+.cand .closed{color:#E03131;font-weight:800;font-size:15px}
 .cand .warn{color:#D9480F;font-weight:700}
 .seq{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-weight:700;font-size:14px}
 .seq span{background:var(--sky-soft);border-radius:999px;padding:3px 9px}.seq span.hk{background:var(--mint-soft)}.seq i{font-style:normal;color:var(--muted)}
@@ -66,6 +69,12 @@ section.stage{margin:28px 0}
 .res-row{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
 .res-row:last-child{border-bottom:0}
 .res-row .lb{font-weight:700}.res-row .cnt{color:var(--muted);font-size:13px}
+.reco{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:6px 0 12px}
+.reco h3{margin:0 0 6px;font-size:16px}.reco .best{background:var(--mint-soft);border-radius:12px;padding:10px 12px;margin:6px 0}
+.reco table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}.reco th,.reco td{text-align:left;padding:6px 4px;border-bottom:1px dashed var(--line)}
+.reco td.n{text-align:right;white-space:nowrap}.reco .warn{color:#D9480F}.reco .cap{color:var(--muted);font-size:12px;margin-top:6px}
+.pin{background:#fff;border:2px solid #FF9F7A;border-radius:999px;padding:3px 9px;font:700 12px Pretendard,sans-serif;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.pin.hk{border-color:#5CC9A7}
 .maptools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
 .chip{font:inherit;font-size:13px;font-weight:700;border:2px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink2)}
 .chip.on{background:var(--grape-soft);border-color:var(--grape);color:#5B3FD6}
@@ -108,6 +117,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;margin-top:30px}
   <section class="stage">
     <div class="sh"><h2>🗺️ 이동 동선</h2><span class="time">1위 「일정 순서」대로 이어져요</span></div>
     <div class="maptools" id="routeMode"></div>
+    <div class="reco" id="reco"></div>
     <div id="map"></div>
     <ul class="legs" id="legs"></ul>
   </section>
@@ -182,6 +192,7 @@ function render(){
       return `<div class="cand ${mine&&mine.id===x.id?'mine':''}">
         ${x.photo?`<img class="ph" src="${esc(x.photo)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}
         ${st.id==='order'?`<div class="seq">${x.seq.map(s=>`<span class="${s==='hike'?'hk':''}">${STEP[s].emoji} ${STEP[s].title}</span>`).join('<i>→</i>')}</div>`:`<div class="top"><div class="nm">${esc(x.name)}</div>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:''}</div>`}
+        ${x.hours&&x.hours.includes('휴무')?`<div class="closed">수요일 휴무</div>`:''}
         ${x.note?`<div class="note">📌 ${esc(x.note)}</div>`:''}
         ${st.id==='order'?'':`<div class="rate">${x.rating?`⭐ <b>${x.rating}</b>${x.reviews?` · 리뷰 ${x.reviews}`:''}`:'⭐ 카카오맵 평점 없음'}${x.hours?` · <span class="${x.hours.startsWith('⚠️')?'warn':''}">${esc(x.hours)}</span>`:''}</div>`}
         ${x.menu?`<div class="menu">🍽️ ${esc(x.menu)}</div>`:''}
@@ -213,12 +224,38 @@ let MAP=null,OVL=[];
 const routePts=()=>{const od=(ROUTE==='mine'?myPick(STAGES[0]):null)||leader(STAGES[0])||ORDERS[0];
   return od.seq.map(s=>{if(s==='hike')return {...START,stage:{emoji:'⛰️',title:'남산 트래킹'}};const st=STAGES.find(x=>x.id===s);const p=ROUTE==='mine'?myPick(st):leader(st);return p&&p.x?{...p,stage:st}:null}).filter(Boolean)};
 const kmLink=(a,b)=>`https://map.kakao.com/link/from/${encodeURIComponent(a.name)},${a.y},${a.x}/to/${encodeURIComponent(b.name)},${b.y},${b.x}`;
+const dist=(a,b)=>{const R=6371,r=Math.PI/180,dl=(b.y-a.y)*r,dn=(b.x-a.x)*r,q=Math.sin(dl/2)**2+Math.cos(a.y*r)*Math.cos(b.y*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(q))*1.3};
+const legTxt=km=>km<=1.5?`도보 약 ${Math.max(1,Math.round(km/4*60))}분`:`택시 약 ${Math.round(km/20*60+5)}분`;
+const openAt=h=>{const m=(h||'').match(/(\d{2}):(\d{2})\s*~/);return m?+m[1]+m[2]/60:null};
+function pickFor(s){if(s==='hike')return {...START,stage:{emoji:'⛰️',title:'남산 트래킹'}};const st=STAGES.find(x=>x.id===s);const p=ROUTE==='mine'?myPick(st):leader(st);return p&&p.x?{...p,stage:st}:null}
+function evalOrder(o){const pts=o.seq.map(pickFor).filter(Boolean);let km=0;const legs=[];for(let i=1;i<pts.length;i++){const d=dist(pts[i-1],pts[i]);km+=d;legs.push([pts[i-1],pts[i],d])}
+  const warn=[];if(o.seq[0]==='cafe'){const c=pickFor('cafe');if(c){const h=openAt(c.hours);if(c.hours&&c.hours.includes('휴무'))warn.push(`${c.name} 수요일 휴무`);else if(h!=null&&h>10)warn.push(`${c.name} ${c.hours.replace('수 ','').split(' ~')[0]} 오픈이라 11시 집결 전 커피 불가`)}}
+  const l=pickFor('lunch');if(l&&o.seq.indexOf('lunch')<o.seq.indexOf('hike')){const h=openAt(l.hours);if(h!=null&&h>10.5)warn.push(`${l.name} ${l.hours.replace('수 ','').split(' ~')[0]} 오픈이라 등산 전 점심이 빠듯함`)}
+  return {o,pts,legs,km,warn}}
+function drawReco(){
+  const R=ORDERS.map(evalOrder),known=R[0].pts.length;
+  if(known<3){$('#reco').innerHTML=`<h3>🧭 추천 동선</h3><div class="cap">${ROUTE==='mine'?'내 픽':'투표'}이 2곳 이상 정해지면 일정 순서별 이동거리를 비교해 추천해 드려요</div>`;return}
+  const ok=R.filter(r=>!r.warn.length),best=(ok.length?ok:R).slice().sort((a,b)=>a.km-b.km)[0];
+  $('#reco').innerHTML=`<h3>🧭 추천 동선 <span style="font-weight:400;color:var(--muted);font-size:12.5px">(${ROUTE==='mine'?'내 픽':'현재 1위'} 장소 기준)</span></h3>
+  <div class="best">👉 <b>${esc(best.o.name)}</b> · 총 이동 약 ${best.km.toFixed(1)}km<br>${best.legs.map(([a,b,d])=>`${esc(a.name)} → ${esc(b.name)} (${d.toFixed(1)}km, ${legTxt(d)})`).join('<br>')}</div>
+  <table><tr><th>일정 순서</th><th>총 이동</th><th>체크</th></tr>${R.map(r=>`<tr><td>${r===best?'⭐ ':''}${esc(r.o.name)}</td><td class="n">${r.km.toFixed(1)}km</td><td class="${r.warn.length?'warn':''}">${r.warn.length?r.warn.map(esc).join('<br>'):'✅'}</td></tr>`).join('')}</table>
+  <div class="cap">직선거리×1.3으로 어림한 값 · 1.5km 이하는 도보, 넘으면 택시 기준 · 안 정해진 단계는 빼고 계산 · 11시 김유신장군상 집결 기준</div>`;
+}
+let LMAP=null,LLAYER=null;
+function drawLeaflet(pts){
+  if(!window.L){$('#map').innerHTML=`<div class="nomap"><div style="font-size:28px">🗺️</div><b>지도를 불러오지 못했어요</b></div>`;return}
+  if(!LMAP){$('#map').innerHTML='';LMAP=L.map('map',{scrollWheelZoom:false}).setView([START.y,START.x],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(LMAP)}
+  if(LLAYER)LLAYER.remove();LLAYER=L.layerGroup().addTo(LMAP);
+  const ll=pts.map(p=>[p.y,p.x]);
+  pts.forEach((p,i)=>L.marker([p.y,p.x],{icon:L.divIcon({className:'',html:`<div class="pin ${p.stage.title==='남산 트래킹'?'hk':''}">${i+1}. ${p.stage.emoji} ${esc(p.name)}</div>`,iconAnchor:[10,28]})}).addTo(LLAYER));
+  pts.forEach(p=>L.circleMarker([p.y,p.x],{radius:6,color:'#fff',weight:2,fillColor:'#A88BFF',fillOpacity:1}).addTo(LLAYER));
+  if(ll.length>1){L.polyline(ll,{color:'#A88BFF',weight:5,opacity:.85,dashArray:'8 8'}).addTo(LLAYER);LMAP.fitBounds(ll,{padding:[50,50]})}else LMAP.setView(ll[0],15);
+}
 function drawRoute(){
+  drawReco();
   const pts=routePts();
   $('#legs').innerHTML=pts.length>1?pts.slice(1).map((p,i)=>`<li><span class="no">${i+1}</span>${esc(pts[i].name)} → <b>${esc(p.name)}</b> <span style="color:var(--muted);font-size:12.5px">${p.stage.emoji} ${p.stage.title}</span><a href="${kmLink(pts[i],p)}" target="_blank" rel="noopener">길찾기 ↗</a></li>`).join(''):`<li style="color:var(--muted)">${ROUTE==='mine'?'내가 고른 곳이 생기면':'투표가 모이면'} 동선이 그려져요</li>`;
-  if(!window.kakao||!kakao.maps){
-    $('#map').innerHTML=`<div class="nomap"><div style="font-size:28px">🗺️</div><b>카카오맵 연결 준비 중</b><div style="font-size:13px">아래 길찾기 링크로 카카오맵에서 바로 볼 수 있어요</div></div>`;return;
-  }
+  if(!window.kakao||!kakao.maps){drawLeaflet(pts);return}
   if(!MAP)MAP=new kakao.maps.Map($('#map'),{center:new kakao.maps.LatLng(START.y,START.x),level:6});
   OVL.forEach(o=>o.setMap(null));OVL=[];
   const bounds=new kakao.maps.LatLngBounds(),path=[];const hk=p=>p.stage.title==='남산 트래킹';
